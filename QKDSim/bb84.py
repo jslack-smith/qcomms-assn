@@ -20,11 +20,8 @@ def main():
     qkd_run = BB84(alice, bob, eve, 10, qu_chan, cl_chan, verbose=True)
 
     qkd_run.initialise()
-
-
     
     qkd_run.send_key_as_photons()
-    
     
     
     qkd_run.sift_keys()

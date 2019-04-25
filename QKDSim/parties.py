@@ -26,6 +26,8 @@ class Sender(object):
         self.key = key
         self.sending_bases = sending_bases
         self.photon_src = photon_src
+        self.qu_chan = qu_chan
+        self.cl_chan = cl_chan
 
     def generateInitialKey(self, length):
         self.key = generateRandBits(length)
@@ -36,7 +38,9 @@ class Sender(object):
         return
     
     def sendPhotons(self):
-        
+        q = self.qu_chan
+        for bit in self.key:
+            q.send()  # TODO finish
         return
 
 
@@ -46,6 +50,8 @@ class Reciever(object):
         self.key = key
         self.recieving_bases = recieving_bases
         self.photon_detector = photon_detector
+        self.qu_chan = qu_chan
+        self.cl_chan = cl_chan
 
     def generateRecievingBases(self, length):
         self.recieving_bases = generateRandBases(length)
