@@ -76,7 +76,7 @@ class M(object):
     def __init__(self, angle):
         self.angle = np.deg2rad(angle)
         self.matrix = self.m_alpha(angle)
-        self.char = self.toChar(angle)
+        self.char = self.toChar(self.angle)
 
     def m_alpha(self, alpha):
         a = np.deg2rad(alpha)

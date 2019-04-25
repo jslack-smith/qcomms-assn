@@ -7,9 +7,10 @@ Created on Wed Apr 24 17:23:54 2019
 import numpy as np
 import random
 from photon import M
+from channels import QuantumChannel
+from channels import ClassicalChannel
 
-
-class Sender(Party):
+class Sender(object):
     """
     Sender (aka Alice)
 
@@ -20,7 +21,8 @@ class Sender(Party):
     photon_src: PhotonSource
     """
 
-    def __init__(self, key=[], sending_bases=[], photon_src=None):
+    def __init__(self, key=[], sending_bases=[], photon_src=None, 
+                 qu_chan, cl_chan):
         self.key = key
         self.sending_bases = sending_bases
         self.photon_src = photon_src
@@ -32,10 +34,15 @@ class Sender(Party):
     def generateSendingBases(self, length):
         self.sending_bases = generateRandBases(length)
         return
+    
+    def sendPhotons(self):
+        
+        return
 
 
 class Reciever(object):
-    def __init__(self, key=[], recieving_bases=[], photon_detector=None):
+    def __init__(self, key=[], recieving_bases=[], photon_detector=None,
+                 qu_chan, cl_chan):
         self.key = key
         self.recieving_bases = recieving_bases
         self.photon_detector = photon_detector
@@ -43,10 +50,12 @@ class Reciever(object):
     def generateRecievingBases(self, length):
         self.recieving_bases = generateRandBases(length)
         return
+    
+    def recievePhotons(self):
 
 
 class Adversary(object):
-    def __init__(self, evesdrop_rate):
+    def __init__(self, evesdrop_rate=0):
         self.evesdrop_rate = evesdrop_rate
 
 
