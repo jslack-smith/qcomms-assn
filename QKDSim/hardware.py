@@ -12,7 +12,7 @@ class PhotonSource(object):
     def __init__(self, error_rate):
         self.error_rate = error_rate  # TODO error rate not used
 
-    def generatePhoton(self, angle):
+    def generate_photon(self, angle):
         return Photon(angle)
 
 
@@ -20,7 +20,7 @@ class PhotonDetector(object):
     def __init__(self, loss_rate):
         self.loss_rate = loss_rate
         
-    def detectPhoton(self, Photon, basis):
+    def detect_photon(self, Photon, basis):
         return Photon.measure(basis.angle)
 
 if __name__ == '__main__':

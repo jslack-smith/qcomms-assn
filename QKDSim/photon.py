@@ -76,14 +76,14 @@ class M(object):
     def __init__(self, angle):
         self.angle = np.deg2rad(angle)
         self.matrix = self.m_alpha(angle)
-        self.char = self.toChar(self.angle)
+        self.char = self.to_char(self.angle)
 
     def m_alpha(self, alpha):
         a = np.deg2rad(alpha)
         m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]])
         return m
 
-    def toChar(self, angle):
+    def to_char(self, angle):
         if np.isclose(angle, 0):
             return 'R'
         elif np.isclose(angle, np.pi/4):

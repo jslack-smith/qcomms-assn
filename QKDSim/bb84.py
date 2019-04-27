@@ -72,9 +72,9 @@ class BB84(object):
 
         Generate random key for sender and random bases for sender and reciever
         """
-        self.sender.generateInitialKey(self.n)
-        self.sender.generateSendingBases(self.n)
-        self.reciever.generateRecievingBases(self.n)
+        self.sender.generate_initial_key(self.n)
+        self.sender.generate_sending_bases(self.n)
+        self.reciever.generate_receiving_bases(self.n)
         
         self.sender.qu_chan = self.qu_chan
         self.reciever.qu_chan = self.qu_chan
@@ -112,8 +112,8 @@ class BB84(object):
     def print_status(self):
         if not self.verbose:
             return
-        self.sender.printState()
-        self.reciever.printState()
+        self.sender.print_state()
+        self.reciever.print_state()
         return
 
 if __name__ == '__main__':

@@ -32,21 +32,21 @@ class Sender(object):
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
 
-    def generateInitialKey(self, length):
-        self.key = generateRandBits(length)
+    def generate_initial_key(self, length):
+        self.key = generate_rand_bits(length)
         return
 
-    def generateSendingBases(self, length):
-        self.sending_bases = generateRandBases(length)
+    def generate_sending_bases(self, length):
+        self.sending_bases = generate_rand_bases(length)
         return
     
-    def sendPhotons(self):
+    def send_photons(self):
         q = self.qu_chan
         for bit in self.key:
             q.send()  # TODO finish
         return
     
-    def printState(self):
+    def print_state(self):
         state_str = list()
         
         state_str.append('{}:'.format(self.name))
@@ -69,15 +69,15 @@ class Reciever(object):
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
 
-    def generateRecievingBases(self, length):
-        self.recieving_bases = generateRandBases(length)
+    def generate_receiving_bases(self, length):
+        self.recieving_bases = generate_rand_bases(length)
         return
     
-    def recievePhotons(self):
+    def receive_photons(self):
         pass
         return
 
-    def printState(self):
+    def print_state(self):
         state_str = list()
         
         state_str.append('{}:'.format(self.name))
@@ -95,12 +95,12 @@ class Adversary(object):
         self.evesdrop_rate = evesdrop_rate
 
 
-def generateRandBits(length):
+def generate_rand_bits(length):
     randBits = np.random.randint(0, 2, length)
     return randBits
 
 
-def generateRandBases(length):
+def generate_rand_bases(length):
     randBases = random.choices([M(0), M(45)], k=length)
     return randBases
 
