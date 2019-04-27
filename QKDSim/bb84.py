@@ -8,7 +8,9 @@ from parties import Reciever
 from parties import Adversary
 from channels import QuantumChannel
 from channels import ClassicalChannel
-
+from enum import Enum
+from showbb84 import DisplayStyle
+from showbb84 import Show
 
 def main():
     alice = Sender(name='Alice')
@@ -16,8 +18,10 @@ def main():
     eve = Adversary()
     qu_chan = QuantumChannel(0)
     cl_chan = ClassicalChannel()
+    
 
     qkd_run = BB84(alice, bob, eve, 10, qu_chan, cl_chan, verbose=True)
+    show = Show(qkd_run, display_style=DisplayStyle.CONSOLE)
 
     qkd_run.initialise()
     
@@ -81,7 +85,7 @@ class BB84(object):
         self.sender.cl_chan = self.cl_chan
         self.reciever.cl_chan = self.cl_chan
         
-        self.print_status()
+        self.show_initialise()
 
 
     def send_key_as_photons(self):
@@ -92,7 +96,7 @@ class BB84(object):
         """
         
         
-        self.print_status()
+        self.show_send_key_as_photons()
 
     def sift_keys(self):
         """
@@ -100,21 +104,39 @@ class BB84(object):
         reciever measured in correct basis and remove incorrect or missing
         bits from both sender's and reciever's keys
         """
-        self.print_status()
+        self.show_sift_keys()
 
     def estimate_error(self):
         """
         Communicate subset of key over classical channel to estimate error
         and remove shared bits
         """
-        self.print_status()
+        self.show_estimate_error()
     
-    def print_status(self):
+    
+    def show_initialise(self):
         if not self.verbose:
             return
         self.sender.print_state()
         self.reciever.print_state()
         return
+    
+    def show_send_key_as_photons(self):
+        pass
+    
+    def show_sift_keys(self):
+        pass
+    
+    def show_estimate_error(self):
+        pass
+
+
+class BB84Stage(Enum):
+    INITIALISE = 1
+    SEND_PHOTONS = 2
+    SIFT_KEYS = 3
+    ESTIMATE_ERROR = 4
+
 
 if __name__ == '__main__':
     main()
