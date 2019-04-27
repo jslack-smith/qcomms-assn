@@ -10,6 +10,8 @@ from photon import M
 from channels import QuantumChannel
 from channels import ClassicalChannel
 
+# TODO make superclass for Sender and Reciever
+
 class Sender(object):
     """
     Sender (aka Alice)
@@ -21,8 +23,9 @@ class Sender(object):
     photon_src: PhotonSource
     """
 
-    def __init__(self, key=[], sending_bases=[], photon_src=None, 
-                 qu_chan, cl_chan):
+    def __init__(self, name='sender', key=[], sending_bases=[],
+                 photon_src=None, qu_chan=None, cl_chan=None):
+        self.name = name
         self.key = key
         self.sending_bases = sending_bases
         self.photon_src = photon_src
@@ -42,11 +45,24 @@ class Sender(object):
         for bit in self.key:
             q.send()  # TODO finish
         return
+    
+    def printState(self):
+        state_str = list()
+        
+        state_str.append('{}:'.format(self.name))
+        state_str.append('\tKey: {}'.format(self.key))
+        state_str.append('\tBases: {}'.format(self.sending_bases))
+        
+        state_str = '\n'.join(state_str)
+        print(state_str)
+        
+        return
 
 
 class Reciever(object):
-    def __init__(self, key=[], recieving_bases=[], photon_detector=None,
-                 qu_chan, cl_chan):
+    def __init__(self, name='reciever', key=[], recieving_bases=[],
+                 photon_detector=None, qu_chan=None, cl_chan=None):
+        self.name = name
         self.key = key
         self.recieving_bases = recieving_bases
         self.photon_detector = photon_detector
@@ -58,6 +74,20 @@ class Reciever(object):
         return
     
     def recievePhotons(self):
+        pass
+        return
+
+    def printState(self):
+        state_str = list()
+        
+        state_str.append('{}:'.format(self.name))
+        state_str.append('\tKey: {}'.format(self.key))
+        state_str.append('\tBases: {}'.format(self.recieving_bases))
+        
+        state_str = '\n'.join(state_str)
+        print(state_str)
+        
+        return
 
 
 class Adversary(object):

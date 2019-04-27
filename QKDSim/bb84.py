@@ -11,8 +11,8 @@ from channels import ClassicalChannel
 
 
 def main():
-    alice = Sender()
-    bob = Reciever()
+    alice = Sender(name='Alice')
+    bob = Reciever(name='Bob')
     eve = Adversary()
     qu_chan = QuantumChannel(0)
     cl_chan = ClassicalChannel()
@@ -112,15 +112,8 @@ class BB84(object):
     def print_status(self):
         if not self.verbose:
             return
-        # TODO make printing functions in parties' classes
-        print("Sender's key:")
-        print(self.sender.key)
-        print("Alice's sending bases:")
-        print(self.sender.sending_bases)
-        print("Bob's recieving bases:")
-        print(self.reciever.recieving_bases)
-        print("Bob's key:")
-        print(self.reciever.key)
+        self.sender.printState()
+        self.reciever.printState()
         return
 
 if __name__ == '__main__':
