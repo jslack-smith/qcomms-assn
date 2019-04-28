@@ -58,6 +58,10 @@ class Photon(object):
         string += 'state vector:\n{}'.format(self.state_vector)
         return string
 
+    def __repr__(self):
+        """Compute 'official' string representation"""
+        return self.arrow()
+
     def arrow(self):
         """Return UTF-8 arrow for photons in basis states"""
         if np.isclose(self.theta, 0):
@@ -73,9 +77,9 @@ class Photon(object):
 
 
 class M(object):
-    def __init__(self, angle):
-        self.angle = np.deg2rad(angle)
-        self.matrix = self.m_alpha(angle)
+    def __init__(self, alpha):
+        self.angle = np.deg2rad(alpha)
+        self.matrix = self.m_alpha(alpha)
         self.char = self.to_char(self.angle)
 
     def m_alpha(self, alpha):
@@ -90,6 +94,9 @@ class M(object):
             return 'D'
         else:
             return ''
+
+    def get_angle(self):
+        return np.degrees(self.angle)
 
     def __repr__(self):
         return self.char
@@ -120,6 +127,7 @@ if __name__ == '__main__':
     N = 1000    # number of experiments
     theta = 0   # photon polarisation
     alpha = 45  # measurement basis polarisation
+    m = M(alpha)
     s = 0       # sum of outcomes (for calculating average)
     for i in range(N):
         photon = Photon(theta)
@@ -127,7 +135,6 @@ if __name__ == '__main__':
 
     avg_outcome = s/N
     print('\nMeasurement test:')
-    print('{}\nM({})\n{} trials'.format(Photon(theta).arrow(), alpha, N))
+    print('{}\nM({}): {}\n{} trials'.format(Photon(theta).arrow(),
+                                            m.get_angle(), m.char, N))
     print('Average outcome: {}'.format(avg_outcome))
-    print(photon)
-    
