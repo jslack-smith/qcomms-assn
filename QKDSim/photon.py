@@ -130,3 +130,4 @@ if __name__ == '__main__':
     print('{}\nM({})\n{} trials'.format(Photon(theta).arrow(), alpha, N))
     print('Average outcome: {}'.format(avg_outcome))
     print(photon)
+    
