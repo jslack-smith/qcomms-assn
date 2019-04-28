@@ -12,6 +12,7 @@ from enum import Enum
 from showbb84 import DisplayStyle
 from showbb84 import Show
 
+
 def main():
     alice = Sender(name='Alice')
     bob = Receiver(name='Bob')

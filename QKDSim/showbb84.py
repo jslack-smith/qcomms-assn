@@ -1,8 +1,3 @@
-'''
-Created on 28 abr. 2019
-
-@author: Emoli-PC
-'''
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr 27 21:58:17 2019
@@ -10,9 +5,11 @@ Created on Sat Apr 27 21:58:17 2019
 @author: James
 """
 
+
+from enum import Enum
 from bb84 import BB84
 from bb84 import BB84Stage
-from enum import Enum
+
 
 class Show(object):
     def __init__(self, bb84, display_style=DisplayStyle.CONSOLE):
@@ -42,7 +39,7 @@ class Show(object):
             pass
         # TODO finish stages, functions
         # TODO refactor to get rid of so many if statements
-            
+
 
 class DisplayStyle(Enum):
     CONSOLE = 1

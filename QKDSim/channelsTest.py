@@ -9,6 +9,7 @@ from photon import Photon
 import random
 import numpy as np
 
+
 def main():
     """
     Simulate channels

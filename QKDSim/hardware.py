@@ -17,7 +17,7 @@ class PhotonSource(object):
     def generatePhoton(self, angle):
         photon_error = random.choices([True, False], 
                                      weights=[self.error_rate, 1-self.error_rate])    
-        if photon_error[0]:
+        if photon_error:
                 # TODO need to update, it will be hard to keep track of key indexes
                 # e.g. send timing info over classical channel
                 return None  
@@ -30,7 +30,7 @@ class PhotonDetector(object):
         self.loss_rate = loss_rate
         
     def detectPhoton(self, Photon, basis):
-        return Photon.measure(basis)
+        return Photon.measure(basis.angle)
 
 if __name__ == '__main__':
     pass
