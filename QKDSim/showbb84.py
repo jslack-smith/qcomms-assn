@@ -1,3 +1,8 @@
+'''
+Created on 28 abr. 2019
+
+@author: Emoli-PC
+'''
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr 27 21:58:17 2019
@@ -7,6 +12,7 @@ Created on Sat Apr 27 21:58:17 2019
 
 from bb84 import BB84
 from bb84 import BB84Stage
+from enum import Enum
 
 class Show(object):
     def __init__(self, bb84, display_style=DisplayStyle.CONSOLE):
@@ -14,7 +20,7 @@ class Show(object):
         self.display_style = display_style
         
     def show_stage(self, stage):
-        if not bb84.verbose:
+        if not BB84.verbose:
             return
         
         # TODO extend for different display options
@@ -41,7 +47,8 @@ class Show(object):
 class DisplayStyle(Enum):
     CONSOLE = 1
     PRINT_TO_FILE = 2
+    PLOT_GRAPH = 3
 
 
 if __name__ == '__main__':
-    main()
+    pass

@@ -10,7 +10,7 @@ from photon import M
 from channels import QuantumChannel
 from channels import ClassicalChannel
 
-# TODO make superclass for Sender and Reciever
+# TODO make superclass for Sender and Receiver
 
 class Sender(object):
     """
@@ -59,18 +59,18 @@ class Sender(object):
         return
 
 
-class Reciever(object):
-    def __init__(self, name='reciever', key=[], recieving_bases=[],
+class Receiver(object):
+    def __init__(self, name='receiver', key=[], receiving_bases=[],
                  photon_detector=None, qu_chan=None, cl_chan=None):
         self.name = name
         self.key = key
-        self.recieving_bases = recieving_bases
+        self.receiving_bases = receiving_bases
         self.photon_detector = photon_detector
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
 
     def generate_receiving_bases(self, length):
-        self.recieving_bases = generate_rand_bases(length)
+        self.receiving_bases = generate_rand_bases(length)
         return
     
     def receive_photons(self):
@@ -82,7 +82,7 @@ class Reciever(object):
         
         state_str.append('{}:'.format(self.name))
         state_str.append('\tKey: {}'.format(self.key))
-        state_str.append('\tBases: {}'.format(self.recieving_bases))
+        state_str.append('\tBases: {}'.format(self.receiving_bases))
         
         state_str = '\n'.join(state_str)
         print(state_str)
@@ -101,7 +101,7 @@ def generate_rand_bits(length):
 
 
 def generate_rand_bases(length):
-    randBases = random.choices([M(0), M(45)], k=length)
+    randBases = random.choice([M(0), M(45)], k=length)
     return randBases
 
 

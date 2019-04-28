@@ -4,7 +4,7 @@ This module contains the class for the BB84 protocol and main() to run it
 """
 
 from parties import Sender
-from parties import Reciever
+from parties import Receiver
 from parties import Adversary
 from channels import QuantumChannel
 from channels import ClassicalChannel
@@ -14,7 +14,7 @@ from showbb84 import Show
 
 def main():
     alice = Sender(name='Alice')
-    bob = Reciever(name='Bob')
+    bob = Receiver(name='Bob')
     eve = Adversary()
     qu_chan = QuantumChannel(0)
     cl_chan = ClassicalChannel()
