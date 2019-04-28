@@ -1,0 +1,9 @@
+Sim:
+- BB84 protocol, introduce errors manually(noise, losses...)
+- Focus on QKD, generating secret key and put errors manually, 1%
+- Reconciliation process
+- Error correction/privacy amplification 
+If we have time: Simulate where the Error bit rates.. come from!
+
+Report: Min 3 pages, explaining what our code is doing and showing
+simulation graphs. Code appended too.
