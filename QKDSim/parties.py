@@ -7,10 +7,9 @@ Created on Wed Apr 24 17:23:54 2019
 import numpy as np
 import random
 from photon import M
-from channels import QuantumChannel
-from channels import ClassicalChannel
 
 # TODO make superclass for Sender and Receiver
+
 
 class Sender(object):
     """
@@ -39,23 +38,23 @@ class Sender(object):
     def generate_sending_bases(self, length):
         self.sending_bases = generate_rand_bases(length)
         return
-    
+
     def send_photons(self):
         q = self.qu_chan
         for bit in self.key:
             q.send()  # TODO finish
         return
-    
+
     def print_state(self):
         state_str = list()
-        
+
         state_str.append('{}:'.format(self.name))
         state_str.append('\tKey: {}'.format(self.key))
         state_str.append('\tBases: {}'.format(self.sending_bases))
-        
+
         state_str = '\n'.join(state_str)
         print(state_str)
-        
+
         return
 
 
@@ -72,21 +71,21 @@ class Receiver(object):
     def generate_receiving_bases(self, length):
         self.receiving_bases = generate_rand_bases(length)
         return
-    
+
     def receive_photons(self):
         pass
         return
 
     def print_state(self):
         state_str = list()
-        
+
         state_str.append('{}:'.format(self.name))
         state_str.append('\tKey: {}'.format(self.key))
         state_str.append('\tBases: {}'.format(self.receiving_bases))
-        
+
         state_str = '\n'.join(state_str)
         print(state_str)
-        
+
         return
 
 
@@ -101,7 +100,7 @@ def generate_rand_bits(length):
 
 
 def generate_rand_bases(length):
-    randBases = random.choice([M(0), M(45)], k=length)
+    randBases = random.choices([M(0), M(45)], k=length)
     return randBases
 
 
