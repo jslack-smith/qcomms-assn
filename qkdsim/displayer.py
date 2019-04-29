@@ -59,6 +59,8 @@ class ConsoleTablePrinter(Displayer):
             ("{}'s receiving bases".format(receiver_name), receiving_bases)
             )
 
+        print("INITIALISATION")
+
         for row in table:
             header = row[0]
             data = row[1]
