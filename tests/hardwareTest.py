@@ -6,8 +6,9 @@ Created on 28 abr. 2019
 import random
 
 from qkdsim.photon import M
-from qkdsim.hardware import PhotonDetector
-from qkdsim.hardware import PhotonSource
+from hardware import PhotonDetector
+from hardware import PhotonSource
+import qkdsim.parties as p
 
 
 def main():
@@ -28,7 +29,7 @@ def photon_generator_test():
     generated_photons = [None] * num_photons
 
     for count in range(0, num_photons):
-        photon = source.generate_photon(45*(random.randint(0, 3)))
+        photon = source.generate_photon((random.randint(0, 1)),p.generate_rand_bases(1)[0])
         if photon is not None:
             generated_photons[count] = photon
             good_photons += 1
@@ -47,7 +48,7 @@ def photon_detector_test():
     out = ""
     # generate the photons we are about to measure
     for count in range(0, num_photons):
-        photon = source.generate_photon(45*(random.randint(0, 3)))
+        photon = source.generate_photon((random.randint(0, 1)),p.generate_rand_bases(1)[0])
         generated_photons[count] = photon
 
 #     print("Generated photons: {}".format(generated_photons))
