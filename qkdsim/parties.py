@@ -6,7 +6,7 @@ Created on Wed Apr 24 17:23:54 2019
 """
 import numpy as np
 import random
-from photon import M
+from qkdsim.photon import M
 
 # TODO make superclass for Sender and Receiver
 

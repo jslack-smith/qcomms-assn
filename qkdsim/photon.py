@@ -43,8 +43,8 @@ class Photon(object):
         #TODO is there a better type to restrict value to 0 or 1 (without
         logic connotation of boolean)
     """
-    def measure(self, alpha):
-        m = M(alpha).matrix
+    def measure(self, basis):
+        m = basis.matrix
         p = [calc_meas_prob(self.state_vector, meas_vec) for meas_vec in m.T]
         outcome = random.choices([0, 1], weights=[p[0], p[1]])[0]
         self.state_vector = m[:, [outcome]]
@@ -97,6 +97,8 @@ class M(object):
 
     def get_angle(self):
         return np.degrees(self.angle)
+    
+    
 
     def __str__(self):
         return self.char
@@ -134,7 +136,7 @@ if __name__ == '__main__':
     s = 0       # sum of outcomes (for calculating average)
     for i in range(N):
         photon = Photon(theta)
-        s += photon.measure(alpha)
+        s += photon.measure(m)
 
     avg_outcome = s/N
     print('\nMeasurement test:')

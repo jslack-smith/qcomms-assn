@@ -3,11 +3,8 @@
 This module contains the class for the BB84 protocol and main() to run it
 """
 
-from parties import Sender
-from parties import Receiver
-from parties import Adversary
-from channels import QuantumChannel
-from channels import ClassicalChannel
+from qkdsim.parties import Sender, Receiver, Adversary
+from channels import QuantumChannel, ClassicalChannel
 from displayer import ConsolePrinter, ConsoleTablePrinter
 
 
