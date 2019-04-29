@@ -83,8 +83,16 @@ class ConsoleTablePrinter(Displayer):
         for row in self.table:
             header = row[0]
             data = row[1]
-            print("{:25}".format(header)
-                  + ''.join(["{:3}".format(str(e)) for e in data]))
+            row_str = list()
+            row_str.append("{:<25}".format(header))
+            # TODO is there a better way to check? only checks first item
+            if len(data) > 0:
+                if hasattr(data[0], 'tabl'):
+                    row_str.extend(["{:>4}".format(e.tabl()) for e in data])
+                else:
+                    row_str.extend(["{:>4}".format(str(e)) for e in data])
+      
+            print(''.join(row_str))
 
 
 if __name__ == '__main__':

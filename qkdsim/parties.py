@@ -40,10 +40,10 @@ class Sender(object):
     def send_photons(self, quantum_channel):
         photons_to_gen_info = list(zip(self.key, self.sending_bases))
         generated_photons = []
-        for bit, basis in photons_to_gen_info:
+        for bit, basis in zip(self.key, self.sending_bases):
             photon = self.generate_photon(bit, basis)
             quantum_channel.send(photon)
-            generated_photons.append(photon)  # not physical
+            generated_photons.append(self.generate_photon(bit, basis))  # not physical
         return generated_photons
 
     def generate_photon(self, bit, basis):

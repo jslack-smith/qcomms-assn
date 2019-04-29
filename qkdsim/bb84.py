@@ -18,7 +18,7 @@ def main():
     qu_chan = QuantumChannel(0)
     cl_chan = ClassicalChannel()
 
-    initial_key_length = 10
+    initial_key_length = 6
 
     qkd_run = BB84(alice, bob, eve, initial_key_length, qu_chan,
                    cl_chan, ConsoleTablePrinter())
@@ -90,7 +90,6 @@ class BB84(object):
         self.receiver.key = [None] * self.n  # TODO update for future loss
         generated_photons = self.sender.send_photons(self.qu_chan)
         self.receiver.receive_photons(self.qu_chan)
-
         self.display_send_key_as_photons(generated_photons)
         return
 
@@ -119,9 +118,9 @@ class BB84(object):
                 )
         return
 
-    def display_send_key_as_photons(self, generated_photons):
+    def display_send_key_as_photons(self, gend_photons):
         self.displayer.display_send_key_as_photons(
-                generated_photons,
+                gend_photons,
                 self.receiver.name,
                 self.receiver.receiving_bases,
                 self.receiver.key
