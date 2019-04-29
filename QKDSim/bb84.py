@@ -4,30 +4,26 @@ This module contains the class for the BB84 protocol and main() to run it
 """
 
 from parties import Sender
-from parties import Reciever
+from parties import Receiver
 from parties import Adversary
 from channels import QuantumChannel
 from channels import ClassicalChannel
-from enum import Enum
-from showbb84 import DisplayStyle
-from showbb84 import Show
+from displayer import ConsolePrinter, ConsoleTablePrinter
+
 
 def main():
     alice = Sender(name='Alice')
-    bob = Reciever(name='Bob')
+    bob = Receiver(name='Bob')
     eve = Adversary()
     qu_chan = QuantumChannel(0)
     cl_chan = ClassicalChannel()
-    
+    initial_key_length = 10
 
-    qkd_run = BB84(alice, bob, eve, 10, qu_chan, cl_chan, verbose=True)
-    show = Show(qkd_run, display_style=DisplayStyle.CONSOLE)
+    qkd_run = BB84(alice, bob, eve, initial_key_length, qu_chan,
+                   cl_chan, ConsoleTablePrinter())
 
     qkd_run.initialise()
-    
     qkd_run.send_key_as_photons()
-    
-    
     qkd_run.sift_keys()
     qkd_run.estimate_error()
 
@@ -61,14 +57,14 @@ class BB84(object):
     """
 
     def __init__(self, sender, reciever, adversary, init_key_len,
-                 qu_chan, cl_chan, verbose=False):
+                 qu_chan, cl_chan, displayer):
         self.sender = sender
         self.reciever = reciever
         self.adversary = adversary
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
         self.n = init_key_len
-        self.verbose = verbose
+        self.displayer = displayer
 
     def initialise(self):
         """
@@ -79,14 +75,14 @@ class BB84(object):
         self.sender.generate_initial_key(self.n)
         self.sender.generate_sending_bases(self.n)
         self.reciever.generate_receiving_bases(self.n)
-        
+
         self.sender.qu_chan = self.qu_chan
         self.reciever.qu_chan = self.qu_chan
         self.sender.cl_chan = self.cl_chan
         self.reciever.cl_chan = self.cl_chan
-        
-        self.show_initialise()
 
+        self.display_initialise()
+        return
 
     def send_key_as_photons(self):
         """
@@ -94,9 +90,9 @@ class BB84(object):
         * send them through the quantum channel to reciever
         * generate reciever's initial key by measuring photons
         """
-        
-        
-        self.show_send_key_as_photons()
+
+        self.display_send_key_as_photons()
+        return
 
     def sift_keys(self):
         """
@@ -104,38 +100,36 @@ class BB84(object):
         reciever measured in correct basis and remove incorrect or missing
         bits from both sender's and reciever's keys
         """
-        self.show_sift_keys()
+        self.display_sift_keys()
+        return
 
     def estimate_error(self):
         """
         Communicate subset of key over classical channel to estimate error
         and remove shared bits
         """
-        self.show_estimate_error()
-    
-    
-    def show_initialise(self):
-        if not self.verbose:
-            return
-        self.sender.print_state()
-        self.reciever.print_state()
+        self.display_estimate_error()
         return
-    
-    def show_send_key_as_photons(self):
-        pass
-    
-    def show_sift_keys(self):
-        pass
-    
-    def show_estimate_error(self):
-        pass
 
+    def display_initialise(self):
+        self.displayer.display_initialise(self.sender.name,
+                                          self.sender.key,
+                                          self.sender.sending_bases,
+                                          self.reciever.name,
+                                          self.reciever.receiving_bases)
+        return
 
-class BB84Stage(Enum):
-    INITIALISE = 1
-    SEND_PHOTONS = 2
-    SIFT_KEYS = 3
-    ESTIMATE_ERROR = 4
+    def display_send_key_as_photons(self):
+        self.displayer.display_send_key_as_photons()
+        return
+
+    def display_sift_keys(self):
+        self.displayer.display_sift_keys()
+        return
+
+    def display_estimate_error(self):
+        self.displayer.display_estimate_error()
+        return
 
 
 if __name__ == '__main__':

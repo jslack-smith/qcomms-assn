@@ -7,10 +7,9 @@ Created on Wed Apr 24 17:23:54 2019
 import numpy as np
 import random
 from photon import M
-from channels import QuantumChannel
-from channels import ClassicalChannel
 
-# TODO make superclass for Sender and Reciever
+# TODO make superclass for Sender and Receiver
+
 
 class Sender(object):
     """
@@ -39,54 +38,30 @@ class Sender(object):
     def generate_sending_bases(self, length):
         self.sending_bases = generate_rand_bases(length)
         return
-    
+
     def send_photons(self):
         q = self.qu_chan
         for bit in self.key:
             q.send()  # TODO finish
         return
-    
-    def print_state(self):
-        state_str = list()
-        
-        state_str.append('{}:'.format(self.name))
-        state_str.append('\tKey: {}'.format(self.key))
-        state_str.append('\tBases: {}'.format(self.sending_bases))
-        
-        state_str = '\n'.join(state_str)
-        print(state_str)
-        
-        return
 
 
-class Reciever(object):
-    def __init__(self, name='reciever', key=[], recieving_bases=[],
+class Receiver(object):
+    def __init__(self, name='receiver', key=[], receiving_bases=[],
                  photon_detector=None, qu_chan=None, cl_chan=None):
         self.name = name
         self.key = key
-        self.recieving_bases = recieving_bases
+        self.receiving_bases = receiving_bases
         self.photon_detector = photon_detector
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
 
     def generate_receiving_bases(self, length):
-        self.recieving_bases = generate_rand_bases(length)
-        return
-    
-    def receive_photons(self):
-        pass
+        self.receiving_bases = generate_rand_bases(length)
         return
 
-    def print_state(self):
-        state_str = list()
-        
-        state_str.append('{}:'.format(self.name))
-        state_str.append('\tKey: {}'.format(self.key))
-        state_str.append('\tBases: {}'.format(self.recieving_bases))
-        
-        state_str = '\n'.join(state_str)
-        print(state_str)
-        
+    def receive_photons(self):
+        pass
         return
 
 
