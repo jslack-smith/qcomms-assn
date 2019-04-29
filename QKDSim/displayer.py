@@ -42,5 +42,38 @@ class ConsolePrinter(Displayer):
         pass
 
 
+class ConsoleTablePrinter(Displayer):
+
+    def display_initialise(self, sender_name, sender_key, sending_bases,
+                           receiver_name, receiving_bases):
+        """
+        create table as a dict, where each (key, value) pair is a row in
+        the table with the key being the header and the value being an
+        array
+        """
+        # s_key_str =
+
+        table = (
+            ("{}'s key".format(sender_name), sender_key),
+            ("{}'s sending bases".format(sender_name), sending_bases),
+            ("{}'s receiving bases".format(receiver_name), receiving_bases)
+            )
+
+        for row in table:
+            header = row[0]
+            data = row[1]
+            print("{:25}".format(header)
+                  + ''.join(["{:3}".format(str(e)) for e in data]))
+
+    def display_send_key_as_photons(self):
+        pass
+
+    def display_sift_keys(self):
+        pass
+
+    def display_estimate_error(self):
+        pass
+
+
 if __name__ == '__main__':
     pass

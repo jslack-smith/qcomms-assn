@@ -8,7 +8,7 @@ from parties import Receiver
 from parties import Adversary
 from channels import QuantumChannel
 from channels import ClassicalChannel
-from displayer import ConsolePrinter
+from displayer import ConsolePrinter, ConsoleTablePrinter
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     initial_key_length = 10
 
     qkd_run = BB84(alice, bob, eve, initial_key_length, qu_chan,
-                   cl_chan, ConsolePrinter())
+                   cl_chan, ConsoleTablePrinter())
 
     qkd_run.initialise()
     qkd_run.send_key_as_photons()

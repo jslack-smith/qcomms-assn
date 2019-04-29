@@ -98,6 +98,9 @@ class M(object):
     def get_angle(self):
         return np.degrees(self.angle)
 
+    def __str__(self):
+        return self.char
+
     def __repr__(self):
         return self.char
 
