@@ -5,15 +5,19 @@ This module contains the class for the BB84 protocol and main() to run it
 
 from qkdsim.parties import Sender, Receiver, Adversary
 from channels import QuantumChannel, ClassicalChannel
-from displayer import ConsolePrinter, ConsoleTablePrinter
+from displayer import ConsoleTablePrinter
+from hardware import PhotonSource, PhotonDetector
 
 
 def main():
-    alice = Sender(name='Alice')
-    bob = Receiver(name='Bob')
+
+    alice = Sender(name='Alice', photon_src=PhotonSource(error_rate=0))
+    bob = Receiver(name='Bob', photon_detector=PhotonDetector(loss_rate=0))
     eve = Adversary()
+
     qu_chan = QuantumChannel(0)
     cl_chan = ClassicalChannel()
+
     initial_key_length = 10
 
     qkd_run = BB84(alice, bob, eve, initial_key_length, qu_chan,
@@ -36,7 +40,7 @@ class BB84(object):
     sender: Sender
         aka Alice
 
-    reciever: Reciever
+    receiver: receiver
         aka Bob
 
     adversary: Adversary
@@ -47,16 +51,16 @@ class BB84(object):
         which will become the shared secret key
 
     qu_chan: QuantumChannel
-        Quantum channel used to share photons between sender and reciever
+        Quantum channel used to share photons between sender and receiver
 
     cl_chan: ClassicalChannel
-        Classical channel used to share messages between sender and reciever
+        Classical channel used to share messages between sender and receiver
     """
 
-    def __init__(self, sender, reciever, adversary, init_key_len,
+    def __init__(self, sender, receiver, adversary, init_key_len,
                  qu_chan, cl_chan, displayer):
         self.sender = sender
-        self.reciever = reciever
+        self.receiver = receiver
         self.adversary = adversary
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
@@ -67,16 +71,10 @@ class BB84(object):
         """
         Initialise QKD
 
-        Generate random key for sender and random bases for sender and reciever
+        Generate random key and bases for sender
         """
         self.sender.generate_initial_key(self.n)
         self.sender.generate_sending_bases(self.n)
-        self.reciever.generate_receiving_bases(self.n)
-
-        self.sender.qu_chan = self.qu_chan
-        self.reciever.qu_chan = self.qu_chan
-        self.sender.cl_chan = self.cl_chan
-        self.reciever.cl_chan = self.cl_chan
 
         self.display_initialise()
         return
@@ -84,18 +82,23 @@ class BB84(object):
     def send_key_as_photons(self):
         """
         * generate photons from sender's key and bases
-        * send them through the quantum channel to reciever
-        * generate reciever's initial key by measuring photons
+        * send them through the quantum channel to receiver
+        * generate random bases for receiver
+        * generate receiver's initial key by measuring photons
         """
+        self.receiver.generate_receiving_bases(self.n)
+        self.receiver.key = [None] * self.n  # TODO update for future loss
+        generated_photons = self.sender.send_photons(self.qu_chan)
+        self.receiver.receive_photons(self.qu_chan)
 
-        self.display_send_key_as_photons()
+        self.display_send_key_as_photons(generated_photons)
         return
 
     def sift_keys(self):
         """
         Communicate over classical channel to establish which photons
-        reciever measured in correct basis and remove incorrect or missing
-        bits from both sender's and reciever's keys
+        receiver measured in correct basis and remove incorrect or missing
+        bits from both sender's and receiver's keys
         """
         self.display_sift_keys()
         return
@@ -109,15 +112,20 @@ class BB84(object):
         return
 
     def display_initialise(self):
-        self.displayer.display_initialise(self.sender.name,
-                                          self.sender.key,
-                                          self.sender.sending_bases,
-                                          self.reciever.name,
-                                          self.reciever.receiving_bases)
+        self.displayer.display_initialise(
+                self.sender.name,
+                self.sender.key,
+                self.sender.sending_bases,
+                )
         return
 
-    def display_send_key_as_photons(self):
-        self.displayer.display_send_key_as_photons()
+    def display_send_key_as_photons(self, generated_photons):
+        self.displayer.display_send_key_as_photons(
+                generated_photons,
+                self.receiver.name,
+                self.receiver.receiving_bases,
+                self.receiver.key
+                )
         return
 
     def display_sift_keys(self):

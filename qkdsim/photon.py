@@ -52,15 +52,15 @@ class Photon(object):
         return outcome
 
     def __str__(self):
-        """Compute printable representation"""
+        """Compute readable representation"""
+        return self.arrow()
+
+    def __repr__(self):
+        """Compute 'official' string representation"""
         string = 'polarisation angle:\n{} {}\n'.format(np.degrees(self.theta),
                                                        self.arrow())
         string += 'state vector:\n{}'.format(self.state_vector)
         return string
-
-    def __repr__(self):
-        """Compute 'official' string representation"""
-        return self.arrow()
 
     def arrow(self):
         """Return UTF-8 arrow for photons in basis states"""
@@ -73,7 +73,10 @@ class Photon(object):
         elif np.isclose(self.theta, 3*np.pi/4):
             return '⭦'
         else:
-            return ''
+            return self.get_angle()
+
+    def get_angle(self):
+        return np.degrees(self.theta)
 
 
 class M(object):
