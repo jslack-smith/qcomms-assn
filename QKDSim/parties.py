@@ -45,18 +45,6 @@ class Sender(object):
             q.send()  # TODO finish
         return
 
-    def print_state(self):
-        state_str = list()
-
-        state_str.append('{}:'.format(self.name))
-        state_str.append('\tKey: {}'.format(self.key))
-        state_str.append('\tBases: {}'.format(self.sending_bases))
-
-        state_str = '\n'.join(state_str)
-        print(state_str)
-
-        return
-
 
 class Receiver(object):
     def __init__(self, name='receiver', key=[], receiving_bases=[],
@@ -74,18 +62,6 @@ class Receiver(object):
 
     def receive_photons(self):
         pass
-        return
-
-    def print_state(self):
-        state_str = list()
-
-        state_str.append('{}:'.format(self.name))
-        state_str.append('\tKey: {}'.format(self.key))
-        state_str.append('\tBases: {}'.format(self.receiving_bases))
-
-        state_str = '\n'.join(state_str)
-        print(state_str)
-
         return
 
 
