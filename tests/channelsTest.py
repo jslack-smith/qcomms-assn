@@ -3,9 +3,9 @@ Created on 28 abr. 2019
 
 @author: Emilio Molina
 '''
-from QKDSim.channels import ClassicalChannel
-from QKDSim.channels import QuantumChannel
-from QKDSim.photon import Photon
+from qkdsim.channels import ClassicalChannel
+from qkdsim.channels import QuantumChannel
+from qkdsim.photon import Photon
 import random
 import numpy as np
 
