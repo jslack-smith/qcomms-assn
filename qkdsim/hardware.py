@@ -4,11 +4,11 @@ Created on Wed Apr 24 17:24:21 2019
 
 @author: James
 """
+import random
+import numpy as np
 
 from photon import Photon
 from photon import M
-import random
-import numpy as np
 
 
 class PhotonSource(object):

@@ -3,11 +3,12 @@ Created on 28 abr. 2019
 
 @author: Emilio Molina
 '''
+import random
+import numpy as np
+
 from qkdsim.channels import ClassicalChannel
 from qkdsim.channels import QuantumChannel
 from qkdsim.photon import Photon
-import random
-import numpy as np
 
 
 def main():
