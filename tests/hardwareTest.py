@@ -4,9 +4,9 @@ Created on 28 abr. 2019
 @author: Emilio Molina
 '''
 import random
-from photon import M
-from hardware import PhotonDetector
-from hardware import PhotonSource
+from QKDSim.photon import M
+from QKDSim.hardware import PhotonDetector
+from QKDSim.hardware import PhotonSource
 
 
 def main():
