@@ -202,8 +202,13 @@ class BB84(object):
                 )
         return
 
-    def display_sift_keys(self, good_measures, alice_key, bob_key):
-        self.displayer.display_sift_keys(good_measures, alice_key, bob_key)
+    def display_sift_keys(self, good_measures, sender_key_p, receiver_key_p):
+        self.displayer.display_sift_keys(good_measures,
+                                         self.sender.name,
+                                         self.receiver.name,
+                                         sender_key_p,
+                                         receiver_key_p
+                                         )
         return
 
     def display_estimate_error(self):

@@ -64,28 +64,29 @@ class ConsoleTablePrinter(Displayer):
         self.table.clear()
         self.table.extend([
             ["SEND KEY AS PHOTONS", ''],
-            ["Sent photons", sent_photons],
+            ["Sent photons (polarisation)", sent_photons],
             ["{}'s (receiving) bases".format(receiver_name), receiving_bases],
             ["Bits as received by {}".format(receiver_name), receiver_key]
             ])
         self.print_table()
         return
 
-    def display_sift_keys(self, good_measures, alice_key, bob_key):
-        
+    def display_sift_keys(self, good_measures, sender_name,
+                          receiver_name, sender_key, receiver_key):
+
         matching = list()
         for item in good_measures:
-            if item == True:
+            if item is True:
                 matching.append('T')
             else:
                 matching.append('F')
-                
+
         self.table.clear()
         self.table.extend([
             ["SIFTED KEYS", ''],
             ["Matching bases?", matching],
-            ["Alice Sifted Key", alice_key],
-            ["Bob Sifted Key", bob_key],
+            ["{}'s key after sifting".format(sender_name), sender_key],
+            ["{}'s key after sifting".format(receiver_name), receiver_key],
             ])
         self.print_table()
         return
@@ -98,7 +99,7 @@ class ConsoleTablePrinter(Displayer):
             header = row[0]
             data = row[1]
             row_str = list()
-            row_str.append("{:<25}".format(header))
+            row_str.append("{:<28}".format(header))
             # TODO is there a better way to check? only checks first item
             if len(data) > 0:
                 if hasattr(data[0], 'tabl'):
