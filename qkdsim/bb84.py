@@ -22,7 +22,7 @@ def main():
     qu_chan = QuantumChannel(eve, p_loss=0)
     cl_chan = ClassicalChannel()
 
-    initial_key_length = 6
+    initial_key_length = 20
 
     qkd_run = BB84(alice, bob, eve, initial_key_length, qu_chan,
                    cl_chan, ConsoleTablePrinter())
