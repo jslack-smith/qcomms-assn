@@ -91,7 +91,10 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_estimate_error(self):
+    def display_correct_keys(self):
+        pass
+
+    def display_privacy_amplification(self):
         pass
 
     def print_table(self):

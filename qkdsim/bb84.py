@@ -7,6 +7,8 @@ from qkdsim.parties import Sender, Receiver, Adversary
 from qkdsim.channels import QuantumChannel, ClassicalChannel
 from qkdsim.displayer import ConsoleTablePrinter
 from qkdsim.hardware import PhotonSource, PhotonDetector
+from qkdsim.errorcorrection import parity_check
+
 from numpy.ma.core import empty
 import copy
 
@@ -28,7 +30,8 @@ def main():
     qkd_run.initialise()
     qkd_run.send_key_as_photons()
     qkd_run.sift_keys()
-    qkd_run.estimate_error()
+    qkd_run.correct_keys()
+    qkd_run.privacy_amplification()
 
     return
 
@@ -135,54 +138,20 @@ class BB84(object):
         party.key = party_key
         return party_key_printing
 
-    def parity_creation(self):
-        """
-        * Create parity of keys.
-        This method will add one last bit to the key with the parity check.
-        Parity bit = 1 if parity even, 0 if uneven
-        """
-        a = self.sender.key
-        b = self.reciever.key
-        a_parity = 0
-        b_parity = 0
-        if ((a.sum(axis=0) % 2) == 0):
-            a_parity = 1
-            a.append(a_parity)
-
-        if ((b.sum(axis=0) % 2) == 0):
-            b_parity = 1
-            b.append(b_parity)
-        return
-
-    def parity_check(self):
-        """
-        * Check parity of keys to see if there are errors on Alice and Bob keys
-        """
-        a = self.sender.key
-        b = self.reciever.key
-        a_parity = a[-1]  # get parity bit
-        b_parity = b[-1]  # get parity bit
-        error_corr = False
-
-        self.reciever.cl_chan.send(b_parity)
-        self.sender.cl_chan.send(a_parity)
-
-        if((self.sender.cl_chan.receive() == b_parity)
-                and (self.receiver.cl_chan.receive() == a_parity)):
-            print("Sucesful parity check")
-        else:
-            print("Unsucesful parity check")
-            # use to decide if we need to perform error corr or not
-            error_corr = True
-
-        return error_corr
-
-    def estimate_error(self):
+    def correct_keys(self):
         """
         Communicate subset of key over classical channel to estimate error
         and remove shared bits
         """
-        self.display_estimate_error()
+        self.display_correct_keys()
+        return
+
+    def privacy_amplification(self):
+        """
+        Communicate subset of key over classical channel to estimate error
+        and remove shared bits
+        """
+        self.display_privacy_amplification()
         return
 
     def display_initialise(self):
@@ -211,8 +180,12 @@ class BB84(object):
                                          )
         return
 
-    def display_estimate_error(self):
-        self.displayer.display_estimate_error()
+    def display_correct_keys(self):
+        self.displayer.display_correct_keys()
+        return
+
+    def display_privacy_amplification(self):
+        self.displayer.display_privacy_amplification()
         return
 
 
