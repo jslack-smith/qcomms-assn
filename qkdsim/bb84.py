@@ -6,20 +6,20 @@ This module contains the class for the BB84 protocol and main() to run it
 from qkdsim.parties import Sender, Receiver, Adversary
 from qkdsim.channels import QuantumChannel, ClassicalChannel
 from qkdsim.displayer import ConsoleTablePrinter
-from qkdsim.hardware import PhotonSource, PhotonDetector
-from qkdsim.errorcorrection import parity_check
+# from qkdsim.hardware import PhotonSource, PhotonDetector
+# from qkdsim.errorcorrection import parity_check
 
-from numpy.ma.core import empty
+# from numpy.ma.core import empty
 import copy
 
 
 def main():
 
-    alice = Sender(name='Alice', photon_src=PhotonSource(error_rate=0))
-    bob = Receiver(name='Bob', photon_detector=PhotonDetector(loss_rate=0))
-    eve = Adversary()
+    alice = Sender()
+    bob = Receiver()
+    eve = Adversary(p_meas=1)
 
-    qu_chan = QuantumChannel(0)
+    qu_chan = QuantumChannel(eve, p_loss=0)
     cl_chan = ClassicalChannel()
 
     initial_key_length = 6
@@ -164,7 +164,12 @@ class BB84(object):
 
     def display_send_key_as_photons(self, gend_photons):
         self.displayer.display_send_key_as_photons(
+                self.sender.name,
                 gend_photons,
+                self.adversary.name,
+                self.adversary.bases,
+                self.adversary.key,
+                self.adversary.get_adversary_generated_photons(),
                 self.receiver.name,
                 self.receiver.receiving_bases,
                 self.receiver.key

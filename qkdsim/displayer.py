@@ -59,12 +59,27 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_send_key_as_photons(self, sent_photons, receiver_name,
-                                    receiving_bases, receiver_key):
+    def display_send_key_as_photons(self, 
+                                    sender_name,
+                                    sent_photons, 
+                                    adversary_name,
+                                    adversary_bases,
+                                    adversary_key,
+                                    adversary_photons,
+                                    receiver_name,
+                                    receiving_bases, 
+                                    receiver_key):
         self.table.clear()
         self.table.extend([
             ["SEND KEY AS PHOTONS", ''],
-            ["Sent photons (polarisation)", sent_photons],
+            ["Photons sent by {}".format(sender_name), sent_photons],
+            ["", ""],
+            ["{}'s bases".format(adversary_name), adversary_bases],
+            ["Bits as received by {}".format(adversary_name), 
+             adversary_key],
+            ["Photons sent by {}".format(adversary_name),
+             adversary_photons],
+            ["", ""],
             ["{}'s (receiving) bases".format(receiver_name), receiving_bases],
             ["Bits as received by {}".format(receiver_name), receiver_key]
             ])
@@ -102,7 +117,7 @@ class ConsoleTablePrinter(Displayer):
             header = row[0]
             data = row[1]
             row_str = list()
-            row_str.append("{:<28}".format(header))
+            row_str.append("{:<30}".format(header))
             # TODO is there a better way to check? only checks first item
             if len(data) > 0:
                 if hasattr(data[0], 'tabl'):
