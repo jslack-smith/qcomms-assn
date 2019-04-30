@@ -92,6 +92,7 @@ class BB84(object):
         self.receiver.receive_photons(self.qu_chan)
         self.display_send_key_as_photons(generated_photons)
         return
+
     def parity_creation(self):
         """
         * Create parity of keys.
@@ -128,12 +129,14 @@ class BB84(object):
         else:
             print("Unsucesful parity check")
             error_corr = True #use to decide if we need to perform error corr or not
+
         return
 
     def sift_keys(self):
         """
         Communicate over classical channel to establish which photons
-        reciever measured in correct basis and remove incorrect or missing bits from both sender's and reciever's keys
+        receiver measured in correct basis and remove incorrect or missing
+        bits from both sender's and receiver's keys
         """
         self.sender.cl_chan.send( self.sender.sending_bases)
         self.reciever.cl_chan.send( self.reciever.sending_bases)

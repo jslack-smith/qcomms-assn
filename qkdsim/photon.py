@@ -52,16 +52,35 @@ class Photon(object):
         return outcome
 
     def __str__(self):
-        """Compute printable representation"""
-        string = 'polarisation angle:\n{} {}\n'.format(np.degrees(self.theta),
-                                                       self.arrow())
-        string += 'state vector:\n{}'.format(self.state_vector)
-        return string
+        """Compute readable representation"""
+        # return self.arrow()
+        return self.arrow()
 
     def __repr__(self):
         """Compute 'official' string representation"""
-        return self.arrow()
+        string = 'polarisation angle:\n{} {}\n'.format(np.degrees(self.theta),
+                                                       self.arrow())
+        string += 'state vector:\n{}'.format(self.state_vector)
+        # return string
+        return self.__str__()
 
+    def tabl(self):
+        return '{:.0f}'.format(self.get_angle())
+# =============================================================================
+#         w = w
+#         if np.isclose(self.theta, 0):
+#             return '{:^{width}}'.format('⇓', width=w)
+#         elif np.isclose(self.theta, np.pi/2):
+#             return '{:^{width}}'.format('⇑', width=w)
+#         elif np.isclose(self.theta, np.pi/4):
+#             return '{:^{width}}'.format('⇗', width=w)
+#         elif np.isclose(self.theta, 3*np.pi/4):
+#             return '{:^{width}}'.format('⇖', width=w)
+#         else:
+#             return self.get_angle()
+# =============================================================================
+
+        
     def arrow(self):
         """Return UTF-8 arrow for photons in basis states"""
         if np.isclose(self.theta, 0):
@@ -73,7 +92,10 @@ class Photon(object):
         elif np.isclose(self.theta, 3*np.pi/4):
             return '⭦'
         else:
-            return ''
+            return self.get_angle()
+
+    def get_angle(self):
+        return np.degrees(self.theta)
 
 
 class M(object):
@@ -97,8 +119,6 @@ class M(object):
 
     def get_angle(self):
         return np.degrees(self.angle)
-    
-    
 
     def __str__(self):
         return self.char
@@ -117,7 +137,7 @@ def calc_meas_prob(psi, m):
 
 def calc_polarisation_angle(psi):
     """ Calculate polarisation angle of state vector psi"""
-    return np.arccos(np.dot(psi.T, np.array([[1, 0]]).T))
+    return np.arccos(np.dot(psi.T, np.array([[1, 0]]).T)).item()
 
 
 if __name__ == '__main__':

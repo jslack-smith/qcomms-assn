@@ -34,7 +34,7 @@ class PhotonDetector(object):
         self.loss_rate = loss_rate
 
     def detect_photon(self, photon, basis):
-        return photon.measure(basis.angle)
+        return photon.measure(basis)
 
 
 if __name__ == '__main__':

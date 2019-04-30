@@ -13,18 +13,19 @@ class QuantumChannel(object):
     def __init__(self, loss_p=0):
         self.loss_p = loss_p
         self.queue = deque([])
-        
+
     def send(self, photon):
         self.queue.append(photon)
         return
+
     def receive(self):
         sent_photon = self.queue.popleft()
-        photon_lost = random.choices([True, False], 
-                                     weights=[self.loss_p, 1-self.loss_p])
-        if photon_lost[0]:
+        photon_lost = random.choices([True, False],
+                                     weights=[self.loss_p, 1-self.loss_p])[0]
+        if photon_lost:
             # TODO need to update, it will be hard to keep track of key indexes
             # e.g. send timing info over classical channel
-            return None  
+            return None
         else:
             return sent_photon
 
@@ -32,11 +33,11 @@ class QuantumChannel(object):
 class ClassicalChannel(object):
     def __init__(self):
         self.queue = deque([])
-    
+
     def send(self,message):
         self.queue.append(message)
         return
-    
+
     def receive(self):
         return self.queue.popleft()
 
