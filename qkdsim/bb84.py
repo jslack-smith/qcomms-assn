@@ -111,18 +111,19 @@ class BB84(object):
         # Sender sends which measures were correct to Receiver
         self.cl_chan.send(good_measures)
         # Receiver sifts its key
-        receiver_siftedKeyPrint = self.siftKey(self.receiver, good_measures)
+        receiver_sifted_key_print = self.sift_key(self.receiver, good_measures)
         # Sender sifts its key
-        sender_siftedKeyPrint = self.siftKey(self.sender, good_measures)
+        sender_sifted_key_print = self.sift_key(self.sender, good_measures)
 
-        self.display_sift_keys(sender_siftedKeyPrint, receiver_siftedKeyPrint)
+        self.display_sift_keys(sender_sifted_key_print,
+                               receiver_sifted_key_print)
         return
 
     def compare_bases(self, a_bases, b_bases):
         compare_result = [a == b for (a, b) in zip(a_bases, b_bases)]
         return compare_result
 
-    def siftKey(self, party, measures):
+    def sift_key(self, party, measures):
         party_key = party.key
         party_key_printing = copy.deepcopy(party.key)
         for i in range(len(measures)-1, 0, -1):

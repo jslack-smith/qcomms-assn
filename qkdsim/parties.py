@@ -48,8 +48,6 @@ class Sender(object):
 
     def generate_photon(self, bit, basis):
         return self.photon_src.generate_photon(bit, basis)
-    
-
 
 
 class Receiver(object):
