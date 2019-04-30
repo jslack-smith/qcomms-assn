@@ -7,6 +7,8 @@ from qkdsim.parties import Sender, Receiver, Adversary
 from qkdsim.channels import QuantumChannel, ClassicalChannel
 from qkdsim.displayer import ConsoleTablePrinter
 from qkdsim.hardware import PhotonSource, PhotonDetector
+from numpy.ma.core import empty
+import copy
 
 
 def main():
@@ -71,10 +73,12 @@ class BB84(object):
         """
         Initialise QKD
 
-        Generate random key and bases for sender
+        Generate random key and bases for sender.
+        Generate random bases for receiver.
         """
         self.sender.generate_initial_key(self.n)
         self.sender.generate_sending_bases(self.n)
+        self.receiver.generate_receiving_bases(self.n)
 
         self.display_initialise()
         return
@@ -99,7 +103,6 @@ class BB84(object):
         receiver measured in correct basis and remove incorrect or missing
         bits from both sender's and receiver's keys
         """
-        self.receiver.send_bases(self.cl_chan)
         # sender receive bases
         # sender calculate which bases correct
         # sender delete incorrect from her key (set to none?)
@@ -107,17 +110,31 @@ class BB84(object):
         # receiver update their key (remove incorrect bases)
         
         # old sifting:
-        self.cl_chan.send( self.receiver.receiving_bases) #Bob sends measuring bases to Alice
+        self.cl_chan.send( self.receiver.receiving_bases) #Receiver sends measuring bases to Sender
         
+        goodMeasures = self.compareBases(self.sender.sending_bases, self.cl_chan.receive()) #Sender compares her bases with Receiver bases
+        self.cl_chan.send (goodMeasures) #Sender sends which measures were correct to Receiver
+        receiver_siftedKeyPrint = self.siftKey(self.receiver,goodMeasures) #Receiver sifts its key
+        sender_siftedKeyPrint = self.siftKey(self.sender,goodMeasures) #Sender sifts its key
         
-        goodMeasures = compareBases(self.sender.sending_bases,self.cl_chan.receive()) #Alice compares her bases with Bob bases
-        self.cl_chan.send (goodMeasures) #Alice sends which measures were correct to Bob
-        siftKey(self.receiver,goodMeasures) #Bob sifts its key
-        siftKey(self.sender,goodMeasures) #Alice sifts its key
-        
-        self.display_sift_keys(self.sender.key,self.receiver.key)
+        self.display_sift_keys(sender_siftedKeyPrint,receiver_siftedKeyPrint)
         return
 
+    def compareBases(self,a_bases,b_bases):
+        compareResult = [a.__eq__(b) for (a,b) in zip(a_bases, b_bases)]
+        return compareResult
+    
+    def siftKey(self,party,measures):
+        party_key = party.key
+        party_key_printing = copy.deepcopy(party.key)
+        for i in range (len(measures)-1,0,-1):
+                if(measures[i] is True):
+                    pass
+                else:
+                    party_key_printing[i] = None
+                    del(party_key[i])
+        party.key = party_key  
+        return party_key_printing
     def parity_creation(self):
         """
         * Create parity of keys.
@@ -193,26 +210,9 @@ class BB84(object):
         return
 
 
+
+
+        
 if __name__ == '__main__':
     main()
-
-def compareBases(self,alice_bases,bob_bases):
-        i =0
-        compareResult = [None]*alice_bases.__sizeof__()
-        for i in range (0,bob_bases.__sizeof__()):
-                if(alice_bases[i] == bob_bases[i]):
-                    compareResult[i] = True
-                else:
-                    compareResult[i] = False
-        return compareResult
-    
-def siftKey(self,party,measures):
-        i =0
-        party_key = party.key
-        for i in range (0,measures.__sizeof__()):
-                if(measures[i] is True):
-                    pass
-                else:
-                    del(party_key[i])
-        party.key = party_key  
     

@@ -6,17 +6,14 @@ This module contains classes for displaying results of simulation
 
 class Displayer(object):
 
-    def display_initialise(self, sender_name, sender_key, sending_bases,
-                           receiver_name, receiving_bases):
+    def display_initialise(self):
         raise NotImplementedError('subclass must override')
 
     def display_send_key_as_photons(self):
         raise NotImplementedError('subclass must override')
 
-    def display_sift_keys(self,alice_key,bob_key):
-        print("Alice sifted key is : {}".format(alice_key))
-        print("Bob sifted key is : {}".format(bob_key))
-
+    def display_sift_keys(self):
+        raise NotImplementedError('subclass must override')
     def display_estimate_error(self):
         raise NotImplementedError('subclass must override')
 
@@ -58,11 +55,12 @@ class ConsoleTablePrinter(Displayer):
             ["{}'s (sending) bases".format(sender_name), sending_bases]
             ])
 
-        # self.print_table()
+        self.print_table()
         return
 
     def display_send_key_as_photons(self, sent_photons, receiver_name, 
                                     receiving_bases, receiver_key):
+        self.table.clear()
         self.table.extend([
             ["SEND KEY AS PHOTONS", ''],
             ["Sent photons", sent_photons],
@@ -72,8 +70,15 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_sift_keys(self):
-        pass
+    def display_sift_keys(self,alice_key,bob_key):
+        self.table.clear()
+        self.table.extend([
+            ["SIFTED KEYS", ''],
+            ["Alice Sifted Key", alice_key],
+            ["Bob Sifted Key", bob_key],
+            ])
+        self.print_table()
+        return
 
     def display_estimate_error(self):
         pass

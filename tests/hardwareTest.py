@@ -6,8 +6,8 @@ Created on 28 abr. 2019
 import random
 
 from qkdsim.photon import M
-from hardware import PhotonDetector
-from hardware import PhotonSource
+from qkdsim.hardware import PhotonDetector
+from qkdsim.hardware import PhotonSource
 import qkdsim.parties as p
 
 
@@ -71,4 +71,5 @@ def photon_detector_test():
 
 
 if __name__ == '__main__':
+    main()
     main()

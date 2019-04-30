@@ -125,6 +125,12 @@ class M(object):
 
     def __repr__(self):
         return self.char
+    
+    def __eq__(self, b):
+        if(self.char == b.char):
+            return True
+        else:
+            return False
 
 
 def calc_meas_prob(psi, m):

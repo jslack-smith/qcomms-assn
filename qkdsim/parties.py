@@ -84,7 +84,7 @@ class Adversary(object):
 
 
 def generate_rand_bits(length):
-    randBits = np.random.randint(0, 2, length)
+    randBits = random.choices([0,1], k=length)
     return randBits
 
 
