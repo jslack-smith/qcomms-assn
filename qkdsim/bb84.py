@@ -3,10 +3,10 @@
 This module contains the class for the BB84 protocol and main() to run it
 """
 
-from parties import Sender, Receiver, Adversary
-from channels import QuantumChannel, ClassicalChannel
-from displayer import ConsoleTablePrinter
-from hardware import PhotonSource, PhotonDetector
+from qkdsim.parties import Sender, Receiver, Adversary
+from qkdsim.channels import QuantumChannel, ClassicalChannel
+from qkdsim.displayer import ConsoleTablePrinter
+from qkdsim.hardware import PhotonSource, PhotonDetector
 
 
 def main():
@@ -107,13 +107,15 @@ class BB84(object):
         # receiver update their key (remove incorrect bases)
         
         # old sifting:
-        self.sender.cl_chan.send( self.sender.sending_bases)
-        self.reciever.cl_chan.send( self.reciever.receiving_bases)
+        self.cl_chan.send( self.receiver.receiving_bases) #Bob sends measuring bases to Alice
         
-        compareBasesAndSiftKey(self.sender,self.reciever.cl_chan.receive()) #Alice compares her bases with Bob bases and remove the bits of key that doesnt much
-        compareBasesAndSiftKey(self.receiver,self.sender.cl_chan.receive()) #Bob does the same
         
-        self.display_sift_keys()
+        goodMeasures = compareBases(self.sender.sending_bases,self.cl_chan.receive()) #Alice compares her bases with Bob bases
+        self.cl_chan.send (goodMeasures) #Alice sends which measures were correct to Bob
+        siftKey(self.receiver,goodMeasures) #Bob sifts its key
+        siftKey(self.sender,goodMeasures) #Alice sifts its key
+        
+        self.display_sift_keys(self.sender.key,self.receiver.key)
         return
 
     def parity_creation(self):
@@ -182,8 +184,8 @@ class BB84(object):
                 )
         return
 
-    def display_sift_keys(self):
-        self.displayer.display_sift_keys()
+    def display_sift_keys(self,alice_key,bob_key):
+        self.displayer.display_sift_keys(alice_key,bob_key)
         return
 
     def display_estimate_error(self):
@@ -194,11 +196,23 @@ class BB84(object):
 if __name__ == '__main__':
     main()
 
-def compareBasesAndSiftKey(self,user,op_base):
-        count =0
-        for count in range (0,op_base.__sizeof__()):
-                if(op_base[count] == user.sending_bases):
+def compareBases(self,alice_bases,bob_bases):
+        i =0
+        compareResult = [None]*alice_bases.__sizeof__()
+        for i in range (0,bob_bases.__sizeof__()):
+                if(alice_bases[i] == bob_bases[i]):
+                    compareResult[i] = True
+                else:
+                    compareResult[i] = False
+        return compareResult
+    
+def siftKey(self,party,measures):
+        i =0
+        party_key = party.key
+        for i in range (0,measures.__sizeof__()):
+                if(measures[i] is True):
                     pass
                 else:
-                    del user.key[count]
-        return
+                    del(party_key[i])
+        party.key = party_key  
+    

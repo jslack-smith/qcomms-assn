@@ -13,8 +13,9 @@ class Displayer(object):
     def display_send_key_as_photons(self):
         raise NotImplementedError('subclass must override')
 
-    def display_sift_keys(self):
-        raise NotImplementedError('subclass must override')
+    def display_sift_keys(self,alice_key,bob_key):
+        print("Alice sifted key is : {}".format(alice_key))
+        print("Bob sifted key is : {}".format(bob_key))
 
     def display_estimate_error(self):
         raise NotImplementedError('subclass must override')
