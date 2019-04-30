@@ -71,10 +71,19 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_sift_keys(self, alice_key, bob_key):
+    def display_sift_keys(self, good_measures, alice_key, bob_key):
+        
+        matching = list()
+        for item in good_measures:
+            if item == True:
+                matching.append('T')
+            else:
+                matching.append('F')
+                
         self.table.clear()
         self.table.extend([
             ["SIFTED KEYS", ''],
+            ["Matching bases?", matching],
             ["Alice Sifted Key", alice_key],
             ["Bob Sifted Key", bob_key],
             ])

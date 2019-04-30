@@ -115,7 +115,7 @@ class BB84(object):
         # Sender sifts its key
         sender_sifted_key_print = self.sift_key(self.sender, good_measures)
 
-        self.display_sift_keys(sender_sifted_key_print,
+        self.display_sift_keys(good_measures, sender_sifted_key_print,
                                receiver_sifted_key_print)
         return
 
@@ -126,7 +126,7 @@ class BB84(object):
     def sift_key(self, party, measures):
         party_key = party.key
         party_key_printing = copy.deepcopy(party.key)
-        for i in range(len(measures)-1, 0, -1):
+        for i in range(len(measures)-1, -1, -1):
                 if(measures[i] is True):
                     pass
                 else:
@@ -202,8 +202,8 @@ class BB84(object):
                 )
         return
 
-    def display_sift_keys(self, alice_key, bob_key):
-        self.displayer.display_sift_keys(alice_key, bob_key)
+    def display_sift_keys(self, good_measures, alice_key, bob_key):
+        self.displayer.display_sift_keys(good_measures, alice_key, bob_key)
         return
 
     def display_estimate_error(self):
