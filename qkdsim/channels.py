@@ -34,12 +34,13 @@ class ClassicalChannel(object):
     def __init__(self):
         self.queue = deque([])
 
-    def send(self,message):
+    def send(self, message):
         self.queue.append(message)
         return
 
     def receive(self):
         return self.queue.popleft()
+
 
 if __name__ == '__main__':
     pass

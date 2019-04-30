@@ -80,7 +80,6 @@ class Photon(object):
 #             return self.get_angle()
 # =============================================================================
 
-        
     def arrow(self):
         """Return UTF-8 arrow for photons in basis states"""
         if np.isclose(self.theta, 0):
@@ -125,7 +124,7 @@ class M(object):
 
     def __repr__(self):
         return self.char
-    
+
     def __eq__(self, b):
         if(self.char == b.char):
             return True

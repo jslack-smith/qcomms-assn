@@ -4,8 +4,8 @@ Created on Wed Apr 24 17:23:54 2019
 
 @author: James
 """
-import numpy as np
 import random
+
 from qkdsim.photon import M
 
 # TODO make superclass for Sender and Receiver

@@ -14,6 +14,7 @@ class Displayer(object):
 
     def display_sift_keys(self):
         raise NotImplementedError('subclass must override')
+
     def display_estimate_error(self):
         raise NotImplementedError('subclass must override')
 
@@ -43,7 +44,7 @@ class ConsolePrinter(Displayer):
 class ConsoleTablePrinter(Displayer):
 
     table = []
-    
+
     def display_initialise(self, sender_name, sender_key, sending_bases):
         """
         create table as a list of lists [[header, array], [header, array]]
@@ -58,7 +59,7 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_send_key_as_photons(self, sent_photons, receiver_name, 
+    def display_send_key_as_photons(self, sent_photons, receiver_name,
                                     receiving_bases, receiver_key):
         self.table.clear()
         self.table.extend([
@@ -70,7 +71,7 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_sift_keys(self,alice_key,bob_key):
+    def display_sift_keys(self, alice_key, bob_key):
         self.table.clear()
         self.table.extend([
             ["SIFTED KEYS", ''],
@@ -83,7 +84,7 @@ class ConsoleTablePrinter(Displayer):
     def display_estimate_error(self):
         pass
 
-    def print_table(self):   
+    def print_table(self):
         for row in self.table:
             header = row[0]
             data = row[1]

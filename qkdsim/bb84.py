@@ -103,78 +103,78 @@ class BB84(object):
         receiver measured in correct basis and remove incorrect or missing
         bits from both sender's and receiver's keys
         """
-        # sender receive bases
-        # sender calculate which bases correct
-        # sender delete incorrect from her key (set to none?)
-        # sender send which bases correct to receiver
-        # receiver update their key (remove incorrect bases)
-        
-        # old sifting:
-        self.cl_chan.send( self.receiver.receiving_bases) #Receiver sends measuring bases to Sender
-        
-        goodMeasures = self.compareBases(self.sender.sending_bases, self.cl_chan.receive()) #Sender compares her bases with Receiver bases
-        self.cl_chan.send (goodMeasures) #Sender sends which measures were correct to Receiver
-        receiver_siftedKeyPrint = self.siftKey(self.receiver,goodMeasures) #Receiver sifts its key
-        sender_siftedKeyPrint = self.siftKey(self.sender,goodMeasures) #Sender sifts its key
-        
-        self.display_sift_keys(sender_siftedKeyPrint,receiver_siftedKeyPrint)
+        # Receiver sends measuring bases to Sender
+        self.cl_chan.send(self.receiver.receiving_bases)
+        # Sender compares her bases with Receiver bases
+        good_measures = self.compare_bases(self.sender.sending_bases,
+                                           self.cl_chan.receive())
+        # Sender sends which measures were correct to Receiver
+        self.cl_chan.send(good_measures)
+        # Receiver sifts its key
+        receiver_siftedKeyPrint = self.siftKey(self.receiver, good_measures)
+        # Sender sifts its key
+        sender_siftedKeyPrint = self.siftKey(self.sender, good_measures)
+
+        self.display_sift_keys(sender_siftedKeyPrint, receiver_siftedKeyPrint)
         return
 
-    def compareBases(self,a_bases,b_bases):
-        compareResult = [a.__eq__(b) for (a,b) in zip(a_bases, b_bases)]
-        return compareResult
-    
-    def siftKey(self,party,measures):
+    def compare_bases(self, a_bases, b_bases):
+        compare_result = [a == b for (a, b) in zip(a_bases, b_bases)]
+        return compare_result
+
+    def siftKey(self, party, measures):
         party_key = party.key
         party_key_printing = copy.deepcopy(party.key)
-        for i in range (len(measures)-1,0,-1):
+        for i in range(len(measures)-1, 0, -1):
                 if(measures[i] is True):
                     pass
                 else:
-                    party_key_printing[i] = None
+                    party_key_printing[i] = 'x'
                     del(party_key[i])
-        party.key = party_key  
+        party.key = party_key
         return party_key_printing
+
     def parity_creation(self):
         """
         * Create parity of keys.
-        This method will add one last bit to the key with the parity check. Parity bit = 1 if parity even, 0 if uneven
+        This method will add one last bit to the key with the parity check.
+        Parity bit = 1 if parity even, 0 if uneven
         """
         a = self.sender.key
         b = self.reciever.key
         a_parity = 0
         b_parity = 0
         if ((a.sum(axis=0) % 2) == 0):
-            a_parity=1
+            a_parity = 1
             a.append(a_parity)
-        
+
         if ((b.sum(axis=0) % 2) == 0):
-            b_parity=1
+            b_parity = 1
             b.append(b_parity)
         return
-    
+
     def parity_check(self):
         """
-        * Check parity of keys to see if there are errors on Alice and Bob keys.
+        * Check parity of keys to see if there are errors on Alice and Bob keys
         """
         a = self.sender.key
         b = self.reciever.key
-        a_parity = a[-1] #get parity bit
-        b_parity = b[-1] #get parity bit
+        a_parity = a[-1]  # get parity bit
+        b_parity = b[-1]  # get parity bit
         error_corr = False
-        
+
         self.reciever.cl_chan.send(b_parity)
         self.sender.cl_chan.send(a_parity)
-        
-        if(( self.sender.cl_chan.receive() == b_parity) and (self.receiver.cl_chan.receive() == a_parity)):
+
+        if((self.sender.cl_chan.receive() == b_parity)
+                and (self.receiver.cl_chan.receive() == a_parity)):
             print("Sucesful parity check")
         else:
             print("Unsucesful parity check")
-            error_corr = True #use to decide if we need to perform error corr or not
+            # use to decide if we need to perform error corr or not
+            error_corr = True
 
-        return
-
-
+        return error_corr
 
     def estimate_error(self):
         """
@@ -201,8 +201,8 @@ class BB84(object):
                 )
         return
 
-    def display_sift_keys(self,alice_key,bob_key):
-        self.displayer.display_sift_keys(alice_key,bob_key)
+    def display_sift_keys(self, alice_key, bob_key):
+        self.displayer.display_sift_keys(alice_key, bob_key)
         return
 
     def display_estimate_error(self):
@@ -210,9 +210,5 @@ class BB84(object):
         return
 
 
-
-
-        
 if __name__ == '__main__':
     main()
-    
