@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-This module contains classes and related to communication channels
+Created on Wed Apr 24 17:24:09 2019
+
+@author: James
 """
 
 from collections import deque

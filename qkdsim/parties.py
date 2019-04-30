@@ -23,8 +23,8 @@ class Sender(object):
     photon_src: PhotonSource
     """
 
-    def __init__(self, name='Alice', key=[], sending_bases=[],
-                 photon_src=PhotonSource(error_rate=0)):
+    def __init__(self, name='sender', key=[], sending_bases=[],
+                 photon_src=None):
         self.name = name
         self.key = key
         self.sending_bases = sending_bases
@@ -52,8 +52,8 @@ class Sender(object):
 
 
 class Receiver(object):
-    def __init__(self, name='Bob', key=[], receiving_bases=[],
-                 photon_detector=PhotonDetector(loss_rate=0)):
+    def __init__(self, name='receiver', key=[], receiving_bases=[],
+                 photon_detector=None):
         self.name = name
         self.key = key
         self.receiving_bases = receiving_bases
@@ -71,7 +71,7 @@ class Receiver(object):
 
     def detect_photon(self, photon, basis):
         return self.photon_detector.detect_photon(photon, basis)
-
+    
     def send_bases(self, cl_chan):
         cl_chan.send(self.receiving_bases)
         return
@@ -120,7 +120,7 @@ class Adversary(object):
 
 
 def generate_rand_bits(length):
-    randBits = random.choices([0, 1], k=length)
+    randBits = random.choices([0,1], k=length)
     return randBits
 
 
