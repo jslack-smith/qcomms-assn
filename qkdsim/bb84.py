@@ -7,7 +7,7 @@ from qkdsim.parties import Sender, Receiver, Adversary
 from qkdsim.channels import QuantumChannel, ClassicalChannel
 from qkdsim.displayer import ConsoleTablePrinter
 from qkdsim.hardware import PhotonSource, PhotonDetector
-from qkdsim.errorcorrection import parity_check
+from qkdsim.errorcorrection import parity_check,errorCorrection
 
 from numpy.ma.core import empty
 import copy
@@ -143,7 +143,25 @@ class BB84(object):
         Communicate subset of key over classical channel to estimate error
         and remove shared bits
         """
-        self.display_correct_keys()
+        self.cl_chan.receive() #clean buffered previous data
+        
+        parity_sender = parity_check(self.sender.key)
+        self.cl_chan.send(parity_sender)
+        
+        parity_receiver = parity_check(self.receiver.key)
+        parity_sender_received = self.cl_chan.receive()
+        
+        self.cl_chan.send(parity_sender)
+        parity_receiver_received = self.cl_chan.receive()
+        parity_receiver_received = 1 - parity_receiver_received #debuf purpose
+
+        if((parity_receiver == parity_sender_received) and (parity_sender == parity_receiver_received)):  
+            self.display_correct_parity()
+        else:
+            self.display_nonCorrect_parity()
+            b_correctedKey = errorCorrection(self.sender.key, self.receiver.key, self.cl_chan)
+            self.display_corrected_receiver_key(b_correctedKey)
+           # self.receiver.key=b_correctedKey    #Once We have the correct key we replace it!
         return
 
     def privacy_amplification(self):
@@ -180,8 +198,15 @@ class BB84(object):
                                          )
         return
 
-    def display_correct_keys(self):
-        self.displayer.display_correct_keys()
+    def display_correct_parity(self):
+        self.displayer.display_correct_parity()
+        return
+    
+    def display_nonCorrect_parity(self):
+        self.displayer.display_nonCorrect_parity()
+        return
+    def display_corrected_receiver_key(self,b_correctedKey):
+        self.displayer.display_corrected_receiver_key(b_correctedKey)
         return
 
     def display_privacy_amplification(self):
