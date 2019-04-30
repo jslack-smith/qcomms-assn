@@ -38,16 +38,18 @@ class Sender(object):
         return
 
     def send_photons(self, quantum_channel):
-        photons_to_gen_info = list(zip(self.key, self.sending_bases))
         generated_photons = []
         for bit, basis in zip(self.key, self.sending_bases):
             photon = self.generate_photon(bit, basis)
             quantum_channel.send(photon)
-            generated_photons.append(self.generate_photon(bit, basis))  # not physical
+            # create two identical photons, for printing table
+            generated_photons.append(self.generate_photon(bit, basis))
         return generated_photons
 
     def generate_photon(self, bit, basis):
         return self.photon_src.generate_photon(bit, basis)
+    
+
 
 
 class Receiver(object):
@@ -70,6 +72,10 @@ class Receiver(object):
 
     def detect_photon(self, photon, basis):
         return self.photon_detector.detect_photon(photon, basis)
+    
+    def send_bases(self, cl_chan):
+        cl_chan.send(self.receiving_bases)
+        return
 
 
 class Adversary(object):

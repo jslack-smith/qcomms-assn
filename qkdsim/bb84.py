@@ -93,6 +93,29 @@ class BB84(object):
         self.display_send_key_as_photons(generated_photons)
         return
 
+    def sift_keys(self):
+        """
+        Communicate over classical channel to establish which photons
+        receiver measured in correct basis and remove incorrect or missing
+        bits from both sender's and receiver's keys
+        """
+        self.receiver.send_bases(self.cl_chan)
+        # sender receive bases
+        # sender calculate which bases correct
+        # sender delete incorrect from her key (set to none?)
+        # sender send which bases correct to receiver
+        # receiver update their key (remove incorrect bases)
+        
+        # old sifting:
+        self.sender.cl_chan.send( self.sender.sending_bases)
+        self.reciever.cl_chan.send( self.reciever.receiving_bases)
+        
+        compareBasesAndSiftKey(self.sender,self.reciever.cl_chan.receive()) #Alice compares her bases with Bob bases and remove the bits of key that doesnt much
+        compareBasesAndSiftKey(self.receiver,self.sender.cl_chan.receive()) #Bob does the same
+        
+        self.display_sift_keys()
+        return
+
     def parity_creation(self):
         """
         * Create parity of keys.
@@ -132,20 +155,7 @@ class BB84(object):
 
         return
 
-    def sift_keys(self):
-        """
-        Communicate over classical channel to establish which photons
-        receiver measured in correct basis and remove incorrect or missing
-        bits from both sender's and receiver's keys
-        """
-        self.sender.cl_chan.send( self.sender.sending_bases)
-        self.reciever.cl_chan.send( self.reciever.sending_bases)
-        
-        compareBasesAndSiftKey(self.sender,self.reciever.cl_chan.receive()) #Alice compares her bases with Bob bases and remove the bits of key that doesnt much
-        compareBasesAndSiftKey(self.receiver,self.sender.cl_chan.receive()) #Bob does the same
-        
-        self.display_sift_keys()
-        return
+
 
     def estimate_error(self):
         """

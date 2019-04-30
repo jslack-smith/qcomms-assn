@@ -48,9 +48,7 @@ class ConsoleTablePrinter(Displayer):
     
     def display_initialise(self, sender_name, sender_key, sending_bases):
         """
-        create table as a dict, where each (key, value) pair is a row in
-        the table with the key being the header and the value being an
-        array
+        create table as a list of lists [[header, array], [header, array]]
         """
 
         self.table.extend([
@@ -78,7 +76,7 @@ class ConsoleTablePrinter(Displayer):
 
     def display_estimate_error(self):
         pass
-    
+
     def print_table(self):   
         for row in self.table:
             header = row[0]
@@ -91,7 +89,6 @@ class ConsoleTablePrinter(Displayer):
                     row_str.extend(["{:>4}".format(e.tabl()) for e in data])
                 else:
                     row_str.extend(["{:>4}".format(str(e)) for e in data])
-      
             print(''.join(row_str))
 
 
