@@ -22,7 +22,7 @@ def main():
     qu_chan = QuantumChannel(eve, p_loss=0)
     cl_chan = ClassicalChannel()
 
-    initial_key_length = 50
+    initial_key_length = 20
 
     qkd = BB84(alice, bob, eve, initial_key_length, qu_chan,
                cl_chan, ConsoleTablePrinter())
@@ -147,6 +147,7 @@ class BB84(object):
                     party_key_printing[i] = 'x'
                     del(party_key[i])
         party.key = party_key
+        party.key_after_sifting = party_key
         return party_key_printing
 
     def correct_keys(self):
@@ -177,8 +178,8 @@ class BB84(object):
         """
         Keys must be np arrays of 7 bit long and identical!
         """
-        a = self.sender.key
-        b = self.receiver.key
+        a = np.array(self.sender.key)[0:7]
+        b = np.array(self.receiver.key)[0:7]
         randomlist = np.random.randint(7, size=(1, 2))
         
         self.cl_chan.send(randomlist)
@@ -192,8 +193,8 @@ class BB84(object):
         b_0 = xor( received_xor.item(0), b.item(received_randomlist.item(0)) ) 
         b_1 = xor( received_xor.item(1), b.item(received_randomlist.item(1)) ) 
         
-        b[0,received_randomlist.item(0)] = b_0
-        b[0,received_randomlist.item(1)] = b_1
+        b[received_randomlist.item(0)] = b_0
+        b[received_randomlist.item(1)] = b_1
 
         self.receiver.key = b
         #Sender xor key
@@ -201,8 +202,8 @@ class BB84(object):
         a_0 = xor( xor_value.item(0), a.item(randomlist.item(0)) ) 
         a_1 = xor( xor_value.item(1), a.item(randomlist.item(1)) ) 
         
-        a[0,randomlist.item(0)] = a_0
-        a[0,randomlist.item(1)] = a_1
+        a[randomlist.item(0)] = a_0
+        a[randomlist.item(1)] = a_1
         self.sender.key = a
         
         self.display_privacy_amplification(self.sender.key,self.receiver.key)

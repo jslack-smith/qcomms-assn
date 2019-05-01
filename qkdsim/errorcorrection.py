@@ -20,8 +20,8 @@ def errorCorrection(a_key,b_key,cl_chan):
         """
         Keys must be np arrays of 7 bit long and both keys must have at MOST 1 error!
         """
-        a = a_key
-        b = b_key
+        a = np.array(a_key)[0:7]
+        b = np.array(b_key)[0:7]
         
         hMatrix = np.matrix([[1, 1, 1, 0, 1, 0, 0], [1, 1, 0, 1, 0, 1, 0], [0, 1, 1, 1, 0, 0, 1]])
         sA = hMatrix * a.reshape((7, 1))

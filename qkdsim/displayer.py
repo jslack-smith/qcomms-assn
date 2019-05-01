@@ -154,7 +154,7 @@ class ConsoleTablePrinter(Displayer):
     def display_corrected_receiver_key(self,b_correctedKey):
         self.table.clear()
         self.table.extend([
-            ["Receiver key was corrected", '']
+            ["Receiver key was corrected", ''],
             ["New receiver key:", b_correctedKey],
             ])
         self.print_table()
@@ -163,7 +163,7 @@ class ConsoleTablePrinter(Displayer):
     def display_privacy_amplification(self,a_key,b_key):
         self.table.clear()
         self.table.extend([
-            ["Receiver and Sender performed Privacy Amplification", '']
+            ["Receiver and Sender performed Privacy Amplification", ''],
             ["New receiver key:", b_key],
             ["New sender key:", a_key],
             ])
