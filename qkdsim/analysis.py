@@ -48,17 +48,20 @@ def plot_key_error_vs_eve_p_meas(x, error, initial_key_length):
 
 
 def print_key_error_vs_eve_p_meas(x, error):
-    header_left = 'Evesdrop probability:' + 3*' '
-    header_right = 'Key bit error:'
-    header = header_left+header_right
-    print(header)
-    data_str = '{:^{left_width}}{:^{right_width}}'.format(
-                '{:.2%}'.format(p),
-                '{:.2%}'.format(e),
-                left_width=len(header_left),
-                right_width=len(header_right)
-                )
-    print(str(data_str))
+    raise NotImplementedError('needs to be updated')
+# =============================================================================
+#     header_left = 'Evesdrop probability:' + 3*' '
+#     header_right = 'Key bit error:'
+#     header = header_left+header_right
+#     print(header)
+#     data_str = '{:^{left_width}}{:^{right_width}}'.format(
+#                 '{:.2%}'.format(p),
+#                 '{:.2%}'.format(e),
+#                 left_width=len(header_left),
+#                 right_width=len(header_right)
+#                 )
+#     print(str(data_str))
+# =============================================================================
     return
 
 
