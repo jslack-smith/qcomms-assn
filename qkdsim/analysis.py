@@ -25,8 +25,8 @@ def key_error_vs_eve_p_meas(printResults=False, plotResults=True):
 
     for (p, qkd) in zip(x, qkd_list):
         qkd.run()
-        sender_key = qkd.sender.key
-        receiver_key = qkd.receiver.key
+        sender_key = qkd.sender.key_after_sifting
+        receiver_key = qkd.receiver.key_after_sifting
         e = calculate_key_error(sender_key, receiver_key)
         error.append(e)
 

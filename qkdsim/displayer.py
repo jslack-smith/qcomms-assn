@@ -42,7 +42,16 @@ class DisplayNothing(Displayer):
     def display_correct_keys(self):
         pass
 
-    def display_privacy_amplification(self):
+    def display_privacy_amplification(self, a_key, b_key):
+        pass
+    
+    def display_correct_parity(self):
+        pass
+    
+    def display_nonCorrect_parity(self):
+        pass
+    
+    def display_corrected_receiver_key(self,b_correctedKey):
         pass
 
 
@@ -67,7 +76,13 @@ class ConsolePrinter(Displayer):
     def display_correct_keys(self):
         pass
 
-    def display_privacy_amplification(self):
+    def display_privacy_amplification(self, a_key, b_key):
+        pass
+
+    def display_nonCorrect_parity(self):
+        pass
+
+    def display_corrected_receiver_key(self, b_correctedKey):
         pass
 
 
