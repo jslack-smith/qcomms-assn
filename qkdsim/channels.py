@@ -6,9 +6,11 @@ This module contains classes and related to communication channels
 from collections import deque
 import random
 
+from qkdsim.parties import Adversary
+
 
 class QuantumChannel(object):
-    def __init__(self, adversary, p_loss=0):
+    def __init__(self, adversary=Adversary(), p_loss=0):
         self.p_loss = p_loss
         self.queue = deque([])
         self.adversary = adversary

@@ -19,6 +19,33 @@ class Displayer(object):
         raise NotImplementedError('subclass must override')
 
 
+class DisplayNothing(Displayer):
+    def display_initialise(self, sender_name, sender_key, sending_bases):
+        pass
+
+    def display_send_key_as_photons(self, 
+                                    sender_name,
+                                    sent_photons, 
+                                    adversary_name,
+                                    adversary_bases,
+                                    adversary_key,
+                                    adversary_photons,
+                                    receiver_name,
+                                    receiving_bases, 
+                                    receiver_key):
+        pass
+
+    def display_sift_keys(self, good_measures, sender_name,
+                          receiver_name, sender_key, receiver_key):
+        pass
+
+    def display_correct_keys(self):
+        pass
+
+    def display_privacy_amplification(self):
+        pass
+
+
 class ConsolePrinter(Displayer):
 
     def display_initialise(self, sender_name, sender_key, sending_bases,
@@ -37,7 +64,10 @@ class ConsolePrinter(Displayer):
     def display_sift_keys(self):
         pass
 
-    def display_estimate_error(self):
+    def display_correct_keys(self):
+        pass
+
+    def display_privacy_amplification(self):
         pass
 
 

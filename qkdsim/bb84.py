@@ -5,7 +5,7 @@ This module contains the class for the BB84 protocol and main() to run it
 
 from qkdsim.parties import Sender, Receiver, Adversary
 from qkdsim.channels import QuantumChannel, ClassicalChannel
-from qkdsim.displayer import ConsoleTablePrinter
+from qkdsim.displayer import ConsoleTablePrinter, DisplayNothing
 # from qkdsim.hardware import PhotonSource, PhotonDetector
 # from qkdsim.errorcorrection import parity_check
 
@@ -14,7 +14,6 @@ import copy
 
 
 def main():
-
     alice = Sender()
     bob = Receiver()
     eve = Adversary(p_meas=1)
@@ -22,17 +21,12 @@ def main():
     qu_chan = QuantumChannel(eve, p_loss=0)
     cl_chan = ClassicalChannel()
 
-    initial_key_length = 20
+    initial_key_length = 50
 
-    qkd_run = BB84(alice, bob, eve, initial_key_length, qu_chan,
-                   cl_chan, ConsoleTablePrinter())
+    qkd = BB84(alice, bob, eve, initial_key_length, qu_chan,
+               cl_chan, ConsoleTablePrinter())
 
-    qkd_run.initialise()
-    qkd_run.send_key_as_photons()
-    qkd_run.sift_keys()
-    qkd_run.correct_keys()
-    qkd_run.privacy_amplification()
-
+    qkd.run()
     return
 
 
@@ -62,15 +56,31 @@ class BB84(object):
         Classical channel used to share messages between sender and receiver
     """
 
-    def __init__(self, sender, receiver, adversary, init_key_len,
-                 qu_chan, cl_chan, displayer):
+    def __init__(self,
+                 sender=Sender(),
+                 receiver=Receiver(),
+                 adversary=Adversary(),
+                 init_key_len=10,
+                 qu_chan=None,
+                 cl_chan=ClassicalChannel(),
+                 displayer=DisplayNothing()):
         self.sender = sender
         self.receiver = receiver
         self.adversary = adversary
+        if qu_chan is None:
+            qu_chan = QuantumChannel(adversary=adversary)
         self.qu_chan = qu_chan
         self.cl_chan = cl_chan
         self.n = init_key_len
         self.displayer = displayer
+
+    def run(self):
+        self.initialise()
+        self.send_key_as_photons()
+        self.sift_keys()
+        self.correct_keys()
+        self.privacy_amplification()
+        return
 
     def initialise(self):
         """
@@ -112,7 +122,7 @@ class BB84(object):
         good_measures = self.compare_bases(self.sender.sending_bases,
                                            self.cl_chan.receive())
         # Sender sends which measures were correct to Receiver
-        self.cl_chan.send(good_measures)
+        # self.cl_chan.send(good_measures)
         # Receiver sifts its key
         receiver_sifted_key_print = self.sift_key(self.receiver, good_measures)
         # Sender sifts its key
