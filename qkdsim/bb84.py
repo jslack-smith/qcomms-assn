@@ -7,9 +7,10 @@ from qkdsim.parties import Sender, Receiver, Adversary
 from qkdsim.channels import QuantumChannel, ClassicalChannel
 from qkdsim.displayer import ConsoleTablePrinter, DisplayNothing
 # from qkdsim.hardware import PhotonSource, PhotonDetector
-# from qkdsim.errorcorrection import parity_check
-
-# from numpy.ma.core import empty
+from qkdsim.errorcorrection import parity_check, errorCorrection
+import numpy as np
+from operator import xor
+import random
 import copy
 
 
@@ -21,7 +22,7 @@ def main():
     qu_chan = QuantumChannel(eve, p_loss=0)
     cl_chan = ClassicalChannel()
 
-    initial_key_length = 50
+    initial_key_length = 20
 
     qkd = BB84(alice, bob, eve, initial_key_length, qu_chan,
                cl_chan, ConsoleTablePrinter())
@@ -60,7 +61,7 @@ class BB84(object):
                  sender=Sender(),
                  receiver=Receiver(),
                  adversary=Adversary(),
-                 init_key_len=10,
+                 init_key_len=7,
                  qu_chan=None,
                  cl_chan=ClassicalChannel(),
                  displayer=DisplayNothing()):
@@ -146,6 +147,7 @@ class BB84(object):
                     party_key_printing[i] = 'x'
                     del(party_key[i])
         party.key = party_key
+        party.key_after_sifting = party_key
         return party_key_printing
 
     def correct_keys(self):
@@ -153,15 +155,58 @@ class BB84(object):
         Communicate subset of key over classical channel to estimate error
         and remove shared bits
         """
-        self.display_correct_keys()
+        
+        parity_sender = parity_check(self.sender.key)
+        self.cl_chan.send(parity_sender)
+        
+        parity_receiver = parity_check(self.receiver.key)
+        parity_sender_received = self.cl_chan.receive()
+        
+        self.cl_chan.send(parity_sender)
+        parity_receiver_received = self.cl_chan.receive()
+
+        if((parity_receiver == parity_sender_received) and (parity_sender == parity_receiver_received)):  
+            self.display_correct_parity()
+        else:
+            self.display_nonCorrect_parity()
+            b_correctedKey = errorCorrection(self.sender.key, self.receiver.key, self.cl_chan)
+            self.display_corrected_receiver_key(b_correctedKey)
+            self.receiver.key=b_correctedKey    #Once We have the correct key we replace it!
         return
 
     def privacy_amplification(self):
         """
-        Communicate subset of key over classical channel to estimate error
-        and remove shared bits
+        Keys must be np arrays of 7 bit long and identical!
         """
-        self.display_privacy_amplification()
+        a = np.array(self.sender.key)[0:7]
+        b = np.array(self.receiver.key)[0:7]
+        randomlist = np.random.randint(7, size=(1, 2))
+        
+        self.cl_chan.send(randomlist)
+        xor_value = np.random.randint(2, size=(1, 2)) 
+        self.cl_chan.send(xor_value)
+        
+        #Receiver xor key
+        received_randomlist = self.cl_chan.receive()
+        received_xor = self.cl_chan.receive()
+       
+        b_0 = xor( received_xor.item(0), b.item(received_randomlist.item(0)) ) 
+        b_1 = xor( received_xor.item(1), b.item(received_randomlist.item(1)) ) 
+        
+        b[received_randomlist.item(0)] = b_0
+        b[received_randomlist.item(1)] = b_1
+
+        self.receiver.key = b
+        #Sender xor key
+        
+        a_0 = xor( xor_value.item(0), a.item(randomlist.item(0)) ) 
+        a_1 = xor( xor_value.item(1), a.item(randomlist.item(1)) ) 
+        
+        a[randomlist.item(0)] = a_0
+        a[randomlist.item(1)] = a_1
+        self.sender.key = a
+        
+        self.display_privacy_amplification(self.sender.key,self.receiver.key)
         return
 
     def display_initialise(self):
@@ -198,9 +243,19 @@ class BB84(object):
     def display_correct_keys(self):
         self.displayer.display_correct_keys()
         return
+    def display_correct_parity(self):
+        self.displayer.display_correct_parity()
+        return
+    def display_nonCorrect_parity(self):
+        self.displayer.display_nonCorrect_parity()
+        return
+    def display_corrected_receiver_key(self,b_correctedKey):
+        #self.displayer.display_corrected_receiver_key(b_correctedKey)
+        return
+    
 
-    def display_privacy_amplification(self):
-        self.displayer.display_privacy_amplification()
+    def display_privacy_amplification(self,a_key,b_key):
+        self.displayer.display_privacy_amplification(a_key,b_key)
         return
 
 

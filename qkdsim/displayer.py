@@ -136,10 +136,38 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_correct_keys(self):
-        pass
+    def display_correct_parity(self):
+        self.table.clear()
+        self.table.extend([
+            ["Parity check successful", '']
+            ])
+        self.print_table()
+        return
+    
+    def display_nonCorrect_parity(self):
+        self.table.clear()
+        self.table.extend([
+            ["Parity check unsuccessful, must apply error correction", '']
+            ])
+        self.print_table()
+        return
+    def display_corrected_receiver_key(self,b_correctedKey):
+        self.table.clear()
+        self.table.extend([
+            ["Receiver key was corrected", ''],
+            ["New receiver key:", b_correctedKey],
+            ])
+        self.print_table()
+        return
 
-    def display_privacy_amplification(self):
+    def display_privacy_amplification(self,a_key,b_key):
+        self.table.clear()
+        self.table.extend([
+            ["Receiver and Sender performed Privacy Amplification", ''],
+            ["New receiver key:", b_key],
+            ["New sender key:", a_key],
+            ])
+        self.print_table()
         pass
 
     def print_table(self):

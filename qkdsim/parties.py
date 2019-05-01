@@ -29,6 +29,7 @@ class Sender(object):
         self.key = key
         self.sending_bases = sending_bases
         self.photon_src = photon_src
+        self.key_after_sifting = []
 
     def generate_initial_key(self, length):
         self.key = generate_rand_bits(length)
@@ -58,6 +59,7 @@ class Receiver(object):
         self.key = key
         self.receiving_bases = receiving_bases
         self.photon_detector = photon_detector
+        self.key_after_sifting = []
 
     def generate_receiving_bases(self, length):
         self.receiving_bases = generate_rand_bases(length)
