@@ -17,7 +17,7 @@ import copy
 def main():
     alice = Sender()
     bob = Receiver()
-    eve = Adversary(p_meas=1)
+    eve = Adversary(p_meas=0.2)
 
     qu_chan = QuantumChannel(eve, p_loss=0)
     cl_chan = ClassicalChannel()
@@ -162,7 +162,7 @@ class BB84(object):
         parity_receiver = parity_check(self.receiver.key)
         parity_sender_received = self.cl_chan.receive()
         
-        self.cl_chan.send(parity_sender)
+        self.cl_chan.send(parity_receiver)
         parity_receiver_received = self.cl_chan.receive()
 
         if((parity_receiver == parity_sender_received) and (parity_sender == parity_receiver_received)):  
@@ -250,7 +250,7 @@ class BB84(object):
         self.displayer.display_nonCorrect_parity()
         return
     def display_corrected_receiver_key(self,b_correctedKey):
-        #self.displayer.display_corrected_receiver_key(b_correctedKey)
+        self.displayer.display_corrected_receiver_key(b_correctedKey)
         return
     
 
