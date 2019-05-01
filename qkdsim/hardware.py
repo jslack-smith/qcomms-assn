@@ -12,9 +12,8 @@ from qkdsim.photon import M
 
 
 class PhotonSource(object):
-    def __init__(self, error_rate=0, pol_offset=0):
+    def __init__(self, error_rate):
         self.error_rate = error_rate  # TODO error rate not used
-        self.pol_offset = pol_offset
 
     def generate_photon(self, bit, basis):
         photon_error = random.choices([True, False],
@@ -25,9 +24,9 @@ class PhotonSource(object):
             # it will be hard to keep track of key indexes
             # e.g. send timing info over classical channel
             return None
-        photon_angle = np.degrees(basis.angle + bit*np.deg2rad(90))
-        photon_angle += self.pol_offset
-        return Photon(photon_angle)
+        else:
+            photon_angle = np.degrees(basis.angle + bit*np.deg2rad(90))
+            return Photon(photon_angle)
 
 
 class PhotonDetector(object):

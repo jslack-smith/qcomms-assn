@@ -56,6 +56,6 @@ def errorCorrection(a_key,b_key,cl_chan):
             else:
                 pass
         
-        return (b - e)
+        return np.absolute((b - e).astype(int))
 if __name__ == '__main__':
     pass

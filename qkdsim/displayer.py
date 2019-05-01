@@ -23,15 +23,15 @@ class DisplayNothing(Displayer):
     def display_initialise(self, sender_name, sender_key, sending_bases):
         pass
 
-    def display_send_key_as_photons(self,
+    def display_send_key_as_photons(self, 
                                     sender_name,
-                                    sent_photons,
+                                    sent_photons, 
                                     adversary_name,
                                     adversary_bases,
                                     adversary_key,
                                     adversary_photons,
                                     receiver_name,
-                                    receiving_bases,
+                                    receiving_bases, 
                                     receiver_key):
         pass
 
@@ -39,10 +39,19 @@ class DisplayNothing(Displayer):
                           receiver_name, sender_key, receiver_key):
         pass
 
-    def display_reconcile_keys(self):
+    def display_correct_keys(self):
         pass
 
     def display_privacy_amplification(self, a_key, b_key):
+        pass
+    
+    def display_correct_parity(self):
+        pass
+    
+    def display_nonCorrect_parity(self):
+        pass
+    
+    def display_corrected_receiver_key(self,b_correctedKey):
         pass
 
 
@@ -64,10 +73,16 @@ class ConsolePrinter(Displayer):
     def display_sift_keys(self):
         pass
 
-    def display_reconcile_keys(self):
+    def display_correct_keys(self):
         pass
 
     def display_privacy_amplification(self, a_key, b_key):
+        pass
+
+    def display_nonCorrect_parity(self):
+        pass
+
+    def display_corrected_receiver_key(self, b_correctedKey):
         pass
 
 
@@ -89,15 +104,15 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_send_key_as_photons(self,
+    def display_send_key_as_photons(self, 
                                     sender_name,
-                                    sent_photons,
+                                    sent_photons, 
                                     adversary_name,
                                     adversary_bases,
                                     adversary_key,
                                     adversary_photons,
                                     receiver_name,
-                                    receiving_bases,
+                                    receiving_bases, 
                                     receiver_key):
         self.table.clear()
         self.table.extend([
@@ -105,7 +120,7 @@ class ConsoleTablePrinter(Displayer):
             ["Photons sent by {}".format(sender_name), sent_photons],
             ["", ""],
             ["{}'s bases".format(adversary_name), adversary_bases],
-            ["Bits as received by {}".format(adversary_name),
+            ["Bits as received by {}".format(adversary_name), 
              adversary_key],
             ["Photons sent by {}".format(adversary_name),
              adversary_photons],
@@ -136,13 +151,39 @@ class ConsoleTablePrinter(Displayer):
         self.print_table()
         return
 
-    def display_reconcile_keys(self):
-        pass
+    def display_correct_parity(self):
+        self.table.clear()
+        self.table.extend([
+            ["Parity check successful", '']
+            ])
+        self.print_table()
+        return
+    
+    def display_nonCorrect_parity(self):
+        self.table.clear()
+        self.table.extend([
+            ["Parity check unsuccessful, must apply error correction", '']
+            ])
+        self.print_table()
+        return
+    def display_corrected_receiver_key(self,b_correctedKey):
+        self.table.clear()
+        self.table.extend([
+            ["Receiver key was corrected", ''],
+            ["New receiver key:", b_correctedKey],
+            ])
+        self.print_table()
         return
 
-    def display_privacy_amplification(self):
+    def display_privacy_amplification(self,a_key,b_key):
+        self.table.clear()
+        self.table.extend([
+            ["Receiver and Sender performed Privacy Amplification", ''],
+            ["New receiver key:", b_key],
+            ["New sender key:", a_key],
+            ])
+        self.print_table()
         pass
-        return
 
     def print_table(self):
         for row in self.table:
@@ -157,7 +198,6 @@ class ConsoleTablePrinter(Displayer):
                 else:
                     row_str.extend(["{:>4}".format(str(e)) for e in data])
             print(''.join(row_str))
-        return
 
 
 if __name__ == '__main__':
